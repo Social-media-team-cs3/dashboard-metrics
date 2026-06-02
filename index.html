@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS3 Social Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#F7F7F8;--surface:#FFFFFF;--surface2:#F3F3F6;--border:#E5E5EA;--border2:#D1D1D8;
+  --text:#111118;--text2:#52525E;--text3:#9898A8;--accent:#4F46E5;--accent-lt:#EEF2FF;
+  --green:#059669;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;
+  --amber:#D97706;--amber-lt:#FFFBEB;--ig:#C2185B;--tt:#00796B;
+  --radius:10px;--radius-sm:6px;--mono:'DM Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
+.shell{display:flex;min-height:100vh}
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sidebar-logo-name{font-size:13px;font-weight:600;color:var(--text)}
+.sidebar-logo-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.sidebar-section{padding:6px 12px 2px;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 20px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:background .1s,color .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--accent-lt);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.plat-tag{font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:3px;margin-left:auto;flex-shrink:0}
+.plat-ig{background:#FCE4EC;color:var(--ig)}.plat-tt{background:#E0F2F1;color:var(--tt)}.plat-both{background:var(--surface2);color:var(--text3)}
+.main{flex:1;min-width:0;padding:32px 28px}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.page-sub{font-size:12px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+.header-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select{font-family:'Inter',sans-serif;font-size:12px;padding:7px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;outline:none}
+select:focus{border-color:var(--accent)}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text3);padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface)}
+.status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
+.status-pill.loading::before{background:var(--amber);animation:blink 1s infinite}
+.status-pill.error::before{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;animation:fadeIn .3s ease both}
+.kpi-label{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px}
+.kpi-val{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.kpi-delta{font-size:11px;font-family:var(--mono);display:flex;align-items:center;gap:3px}
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text3)}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.charts-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;animation:fadeIn .35s ease both}
+.card-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:500}.card-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.card-badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;padding:9px 12px;font-size:10px;font-family:var(--mono);letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-family:var(--mono);font-size:12px;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--surface2)}
+.prop-cell{color:var(--text);font-weight:500;font-family:'Inter',sans-serif;font-size:12px}
+.plat-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
+.pill-ig{background:#FCE4EC;color:var(--ig)}.pill-tt{background:#E0F2F1;color:var(--tt)}
+.eng-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
+.eng-good{background:var(--green-lt);color:var(--green)}.eng-mid{background:var(--amber-lt);color:var(--amber)}.eng-low{background:var(--red-lt);color:var(--red)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text3)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-family:var(--mono);font-size:12px;line-height:2}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(max-width:1000px){.sidebar{display:none}.charts-grid{grid-template-columns:1fr}.charts-grid-3{grid-template-columns:1fr}}
+@media(max-width:640px){.main{padding:16px}.kpi-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-name">CS3 Management</div>
+      <div class="sidebar-logo-sub">Social Dashboard</div>
+    </div>
+    <div class="sidebar-section">Vista</div>
+    <div class="nav-item active" onclick="setView('all')" id="nav-all">
+      <div class="nav-dot" style="background:#4F46E5"></div>Todas las propiedades
+    </div>
+    <div class="sidebar-section" style="margin-top:8px">Propiedades</div>
+    <div id="nav-props"></div>
+  </nav>
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="page-title">Todas las propiedades</div>
+        <div class="page-sub" id="page-sub">Conectando con Google Sheets...</div>
+      </div>
+      <div class="header-controls">
+        <select id="plat-filter" onchange="render()">
+          <option value="ALL">Instagram + TikTok</option>
+          <option value="Instagram">Solo Instagram</option>
+          <option value="TikTok">Solo TikTok</option>
+        </select>
+        <select id="month-filter" onchange="render()">
+          <option value="ALL">Todos los meses</option>
+        </select>
+        <div class="status-pill loading" id="status">Cargando...</div>
+      </div>
+    </div>
+    <div class="kpi-row" id="kpi-row">
+      <div class="empty-state" style="grid-column:1/-1">Cargando datos desde Google Sheets...</div>
+    </div>
+    <div class="charts-grid">
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Seguidores</div><div class="card-sub">evolución mensual</div></div><span class="card-badge">FOLLOWERS</span></div>
+        <div style="height:200px"><canvas id="c-followers"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Views</div><div class="card-sub">alcance mensual</div></div><span class="card-badge">REACH</span></div>
+        <div style="height:200px"><canvas id="c-views"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-grid-3">
+      <div class="card" id="likes-card">
+        <div class="card-hd"><div><div class="card-title">Likes por propiedad</div><div class="card-sub">total del período</div></div></div>
+        <div style="height:180px"><canvas id="c-likes"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Engagement rate</div><div class="card-sub">likes / views × 100</div></div></div>
+        <div style="height:180px"><canvas id="c-engagement"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Split plataformas</div><div class="card-sub">por views totales</div></div></div>
+        <div style="height:140px"><canvas id="c-donut"></canvas></div>
+        <div class="legend" style="justify-content:center">
+          <div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div>
+          <div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div><div class="card-title">Detalle</div><div class="card-sub" id="tbl-sub">—</div></div></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>PROPIEDAD</th><th>PLATAFORMA</th><th>MES</th>
+            <th>SEGUIDORES</th><th>Δ SEG.</th><th>VIEWS</th><th>LIKES</th>
+            <th>COMENTARIOS</th><th>CLICKS</th><th>POSTS</th><th>ENGAGEMENT</th>
+          </tr></thead>
+          <tbody id="tbl-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+// ════════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════════
+var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR92sBv-5HnZBdT5W--fpP1Qd-VlAO6XCF-V_V6lWLfVpT0p4usMWahe5gte_WjZAnhQZ0mixtLO7xn/pub?gid=1973962386&single=true&output=csv';
+
+var PROP_COLORS = {
+  'McKenzie':'#4F46E5','The Reserve at Cool Springs':'#9D174D',
+  'The Gateway Village':'#166534','Legends at Armour Avenue':'#92400E',
+  'Legacy':'#1D4ED8','Winding Springs':'#991B1B',
+  'Ascend':'#14532D','CS3 Management':'#3730A3'
+};
+var FB = ['#4F46E5','#9D174D','#166534','#92400E','#1D4ED8','#991B1B','#14532D','#3730A3'];
+
+var ALL_DATA = [];
+var currentView = 'all';
+var charts = {};
+
+// ════════════════════════════════════════════════════════════════
+// FETCH + PARSE
+// ════════════════════════════════════════════════════════════════
+function loadData() {
+  setStatus('loading','Cargando...');
+  fetch(CSV_URL)
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      return res.text();
+    })
+    .then(function(text) {
+      ALL_DATA = parseCSV(text);
+      if (!ALL_DATA.length) throw new Error('Sin datos en el Sheets');
+      buildNav();
+      buildMonthFilter();
+      render();
+      setStatus('ok', ALL_DATA.length+' registros · live');
+      document.getElementById('page-sub').textContent = ALL_DATA.length+' registros · Google Sheets en vivo';
+    })
+    .catch(function(e) {
+      setStatus('error','Error');
+      document.getElementById('page-sub').textContent = e.message;
+      document.getElementById('kpi-row').innerHTML = '<div class="empty-state" style="grid-column:1/-1">No se pudieron cargar los datos.<br><small>'+e.message+'</small></div>';
+    });
+}
+
+function parseCSV(text) {
+  var lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+
+  // Find header row — look for "fecha" in first 5 lines
+  var headerIdx = 0;
+  for (var i = 0; i < Math.min(5, lines.length); i++) {
+    if (lines[i].toLowerCase().indexOf('fecha') !== -1) {
+      headerIdx = i;
+      break;
+    }
+  }
+
+  var headers = splitLine(lines[headerIdx]);
+  for (var h = 0; h < headers.length; h++) {
+    headers[h] = headers[h].toLowerCase().trim();
+  }
+
+  var rows = [];
+  var numFields = ['seguidores','views','likes','comentarios','guardados','compartidos','clicks','posts'];
+
+  for (var i = headerIdx + 1; i < lines.length; i++) {
+    var vals = splitLine(lines[i]);
+    var obj = {};
+    for (var j = 0; j < headers.length; j++) {
+      obj[headers[j]] = (vals[j] || '').trim();
+    }
+    if (!obj['propiedad'] || !obj['fecha']) continue;
+
+    // FIX #1: Parse numbers — remove ALL dots and commas (they are thousands separators)
+    // "3.322" → "3322", "1,307" → "1307", "35" → "35"
+    for (var n = 0; n < numFields.length; n++) {
+      var raw = (obj[numFields[n]] || '').replace(/[.\s,]/g, '');
+      obj[numFields[n]] = parseInt(raw, 10) || 0;
+    }
+
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function splitLine(line) {
+  var out = [], cur = '', inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    var c = line[i];
+    if (c === '"') { inQ = !inQ; continue; }
+    if (c === ',' && !inQ) { out.push(cur); cur = ''; continue; }
+    cur += c;
+  }
+  out.push(cur);
+  return out;
+}
+
+// ════════════════════════════════════════════════════════════════
+// FILTERS
+// ════════════════════════════════════════════════════════════════
+function filtered() {
+  var plat = document.getElementById('plat-filter').value;
+  var month = document.getElementById('month-filter').value;
+  return ALL_DATA.filter(function(r) {
+    return (currentView === 'all' || r['propiedad'] === currentView) &&
+           (plat === 'ALL' || r['plataforma'] === plat) &&
+           (month === 'ALL' || r['fecha'] === month);
+  });
+}
+
+function buildMonthFilter() {
+  var months = uniqueSorted(ALL_DATA, 'fecha');
+  var sel = document.getElementById('month-filter');
+  while (sel.options.length > 1) sel.remove(1);
+  for (var i = 0; i < months.length; i++) {
+    if (!months[i]) continue;
+    var o = document.createElement('option');
+    o.value = months[i]; o.textContent = fmtMonth(months[i]);
+    sel.appendChild(o);
+  }
+}
+
+function buildNav() {
+  var props = uniqueSorted(ALL_DATA, 'propiedad');
+  var container = document.getElementById('nav-props');
+  container.innerHTML = '';
+  for (var i = 0; i < props.length; i++) {
+    var p = props[i];
+    if (!p) continue;
+    var plats = uniqueSorted(ALL_DATA.filter(function(r){return r['propiedad']===p}), 'plataforma');
+    var hasIG = plats.indexOf('Instagram') !== -1;
+    var hasTT = plats.indexOf('TikTok') !== -1;
+    var tag = hasIG && hasTT ? '<span class="plat-tag plat-both">IG·TT</span>'
+            : hasIG ? '<span class="plat-tag plat-ig">IG</span>'
+            : '<span class="plat-tag plat-tt">TT</span>';
+    var color = PROP_COLORS[p] || FB[i % FB.length];
+    var el = document.createElement('div');
+    el.className = 'nav-item';
+    el.setAttribute('data-prop', p);
+    el.innerHTML = '<div class="nav-dot" style="background:'+color+'"></div>'+
+      '<span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:12px">'+p+'</span>'+tag;
+    el.onclick = (function(prop) { return function() { setView(prop); }; })(p);
+    container.appendChild(el);
+  }
+}
+
+function setView(prop) {
+  currentView = prop;
+  var items = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < items.length; i++) {
+    var el = items[i];
+    if (prop === 'all') {
+      el.classList.toggle('active', el.id === 'nav-all');
+    } else {
+      el.classList.toggle('active', el.getAttribute('data-prop') === prop);
+    }
+  }
+  document.getElementById('page-title').textContent = prop === 'all' ? 'Todas las propiedades' : prop;
+  render();
+}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER MAIN
+// ════════════════════════════════════════════════════════════════
+function render() {
+  var data = filtered();
+  renderKPIs(data);
+  renderLine('followers', data, 'seguidores', 'c-followers');
+  renderLine('views', data, 'views', 'c-views');
+
+  // FIX #3: "Likes por propiedad" only on "all" view
+  var likesCard = document.getElementById('likes-card');
+  if (currentView !== 'all') {
+    likesCard.style.display = 'none';
+    destroyChart('likes');
+  } else {
+    likesCard.style.display = '';
+    renderBars('likes', data, 'likes', 'c-likes');
+  }
+
+  renderEngagement(data);
+  renderDonut(data);
+  renderTable(data);
+  document.getElementById('tbl-sub').textContent = data.length + ' registros';
+}
+
+// ════════════════════════════════════════════════════════════════
+// FIX #2: KPI CARDS — proper month selection + delta
+// ════════════════════════════════════════════════════════════════
+function renderKPIs(data) {
+  var monthSel = document.getElementById('month-filter').value;
+  var platSel = document.getElementById('plat-filter').value;
+  var allMonths = uniqueSorted(ALL_DATA, 'fecha');
+
+  var metrics = [
+    {label:'Seguidores', key:'seguidores'},
+    {label:'Views',      key:'views'},
+    {label:'Likes',      key:'likes'},
+    {label:'Comentarios',key:'comentarios'},
+    {label:'Clicks',     key:'clicks'},
+    {label:'Posts',      key:'posts'}
+  ];
+
+  var displayVal, lastM, prevM, currRows, prevRows;
+
+  if (monthSel !== 'ALL') {
+    // SPECIFIC MONTH: show that month's totals, compare vs previous month
+    lastM = monthSel;
+    var mIdx = allMonths.indexOf(lastM);
+    prevM = mIdx > 0 ? allMonths[mIdx - 1] : null;
+
+    // currRows = data already filtered by month+prop+plat
+    currRows = data;
+
+    // prevRows = same prop+plat filters but previous month
+    prevRows = prevM ? ALL_DATA.filter(function(r) {
+      return r['fecha'] === prevM &&
+             (currentView === 'all' || r['propiedad'] === currentView) &&
+             (platSel === 'ALL' || r['plataforma'] === platSel);
+    }) : [];
+
+    document.getElementById('kpi-row').innerHTML = metrics.map(function(m, i) {
+      var val = sumField(currRows, m.key);
+      var pval = sumField(prevRows, m.key);
+      var d = pval > 0 ? ((val - pval) / pval * 100) : null;
+      var cls = d === null ? 'neutral' : d >= 0 ? 'up' : 'down';
+      var arrow = d === null ? '—' : (d >= 0 ? '▲' : '▼') + ' ' + Math.abs(d).toFixed(1) + '%';
+      var sub = prevM ? 'vs ' + fmtMonth(prevM) : '';
+      return '<div class="kpi" style="animation-delay:'+i*0.05+'s">' +
+        '<div class="kpi-label">'+m.label+'</div>' +
+        '<div class="kpi-val">'+fmt(val)+'</div>' +
+        '<div class="kpi-delta '+cls+'">'+arrow+'&nbsp;<span style="color:var(--text3)">'+sub+'</span></div></div>';
+    }).join('');
+
+  } else {
+    // ALL MONTHS: show cumulative total, compare last month vs previous
+    var dataMonths = uniqueSorted(data, 'fecha');
+    lastM = dataMonths[dataMonths.length - 1];
+    prevM = dataMonths.length > 1 ? dataMonths[dataMonths.length - 2] : null;
+
+    var lastRows = data.filter(function(r){ return r['fecha'] === lastM; });
+    var prevRows2 = prevM ? data.filter(function(r){ return r['fecha'] === prevM; }) : [];
+
+    document.getElementById('kpi-row').innerHTML = metrics.map(function(m, i) {
+      var total = sumField(data, m.key);
+      var lv = sumField(lastRows, m.key);
+      var pv = sumField(prevRows2, m.key);
+      var d = pv > 0 ? ((lv - pv) / pv * 100) : null;
+      var cls = d === null ? 'neutral' : d >= 0 ? 'up' : 'down';
+      var arrow = d === null ? '—' : (d >= 0 ? '▲' : '▼') + ' ' + Math.abs(d).toFixed(1) + '%';
+      var sub = prevM ? fmtMonth(lastM) + ' vs ' + fmtMonth(prevM) : '';
+      return '<div class="kpi" style="animation-delay:'+i*0.05+'s">' +
+        '<div class="kpi-label">'+m.label+'</div>' +
+        '<div class="kpi-val">'+fmt(total)+'</div>' +
+        '<div class="kpi-delta '+cls+'">'+arrow+'&nbsp;<span style="color:var(--text3)">'+sub+'</span></div></div>';
+    }).join('');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// CHARTS
+// ════════════════════════════════════════════════════════════════
+Chart.defaults.color = '#9898A8';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+Chart.defaults.borderColor = '#E5E5EA';
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+function renderLine(chartId, data, field, canvasId) {
+  destroyChart(chartId);
+  var months = uniqueSorted(data, 'fecha');
+  var props = uniqueSorted(data, 'propiedad');
+  var datasets = props.map(function(p, i) {
+    return {
+      label: p,
+      data: months.map(function(m) {
+        var v = sumField(data.filter(function(r){return r['propiedad']===p&&r['fecha']===m}), field);
+        return v > 0 ? v : null;
+      }),
+      borderColor: PROP_COLORS[p] || FB[i % 8],
+      backgroundColor: 'transparent',
+      borderWidth: 1.5, pointRadius: 3, tension: 0.3, spanGaps: true
+    };
+  });
+  charts[chartId] = new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: { labels: months.map(fmtMonth), datasets: datasets },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,padding:10,font:{size:10}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}
+    }
+  });
+}
+
+function renderBars(chartId, data, field, canvasId) {
+  destroyChart(chartId);
+  var props = uniqueSorted(data, 'propiedad');
+  var vals = props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),field)});
+  charts[chartId] = new Chart(document.getElementById(canvasId), {
+    type:'bar',
+    data:{
+      labels:props.map(function(p){return p.length>13?p.slice(0,12)+'…':p}),
+      datasets:[{data:vals,
+        backgroundColor:props.map(function(p,i){return (PROP_COLORS[p]||FB[i%8])+'28'}),
+        borderColor:props.map(function(p,i){return PROP_COLORS[p]||FB[i%8]}),
+        borderWidth:1,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+  });
+}
+
+function renderEngagement(data) {
+  destroyChart('engagement');
+  var props = uniqueSorted(data, 'propiedad');
+  var vals = props.map(function(p) {
+    var rows = data.filter(function(r){return r['propiedad']===p});
+    var v = sumField(rows,'views'), l = sumField(rows,'likes');
+    return v > 0 ? parseFloat((l/v*100).toFixed(2)) : 0;
+  });
+  charts.engagement = new Chart(document.getElementById('c-engagement'), {
+    type:'bar',
+    data:{
+      labels:props.map(function(p){return p.length>13?p.slice(0,12)+'…':p}),
+      datasets:[{data:vals,
+        backgroundColor:vals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),
+        borderColor:vals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),
+        borderWidth:1,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}
+  });
+}
+
+function renderDonut(data) {
+  destroyChart('donut');
+  var ig = sumField(data.filter(function(r){return r['plataforma']==='Instagram'}),'views');
+  var tt = sumField(data.filter(function(r){return r['plataforma']==='TikTok'}),'views');
+  charts.donut = new Chart(document.getElementById('c-donut'), {
+    type:'doughnut',
+    data:{labels:['Instagram','TikTok'],datasets:[{data:[ig,tt],
+      backgroundColor:['#C2185B22','#00796B22'],borderColor:['#C2185B','#00796B'],
+      borderWidth:1.5,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.parsed)}}}}}
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// TABLE
+// ════════════════════════════════════════════════════════════════
+function renderTable(data) {
+  var deltaMap = {};
+  for (var i = 0; i < ALL_DATA.length; i++) {
+    var r = ALL_DATA[i];
+    var key = r['propiedad']+'|'+r['plataforma'];
+    if (!deltaMap[key]) deltaMap[key] = [];
+    deltaMap[key].push(r);
+  }
+
+  var sorted = data.slice().sort(function(a,b) {
+    if (b['fecha'] !== a['fecha']) return b['fecha'] < a['fecha'] ? -1 : 1;
+    return a['propiedad'] < b['propiedad'] ? -1 : 1;
+  });
+
+  var html = '';
+  for (var i = 0; i < Math.min(sorted.length, 80); i++) {
+    var r = sorted[i];
+    var eng = r['views'] > 0 ? (r['likes']/r['views']*100) : 0;
+    var engCls = eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';
+    var platCls = r['plataforma']==='Instagram'?'pill-ig':'pill-tt';
+
+    var key = r['propiedad']+'|'+r['plataforma'];
+    var hist = (deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1});
+    var idx = -1;
+    for (var j=0;j<hist.length;j++) { if (hist[j]['fecha']===r['fecha']) { idx=j; break; } }
+    var dCell = '<span style="color:var(--text3)">—</span>';
+    if (idx > 0) {
+      var diff = r['seguidores'] - hist[idx-1]['seguidores'];
+      if (diff !== 0) {
+        var cls = diff>0?'up':'down';
+        dCell = '<span class="'+cls+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';
+      }
+    }
+
+    html += '<tr>'+
+      '<td class="prop-cell">'+r['propiedad']+'</td>'+
+      '<td><span class="plat-pill '+platCls+'">'+r['plataforma']+'</span></td>'+
+      '<td>'+fmtMonth(r['fecha'])+'</td>'+
+      '<td>'+fmt(r['seguidores'])+'</td>'+
+      '<td>'+dCell+'</td>'+
+      '<td>'+fmt(r['views'])+'</td>'+
+      '<td>'+fmt(r['likes'])+'</td>'+
+      '<td>'+fmt(r['comentarios'])+'</td>'+
+      '<td>'+fmt(r['clicks'])+'</td>'+
+      '<td>'+(r['posts']||'—')+'</td>'+
+      '<td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td>'+
+      '</tr>';
+  }
+  document.getElementById('tbl-body').innerHTML = html;
+}
+
+// ════════════════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════════════════
+function sumField(arr, key) {
+  var total = 0;
+  for (var i = 0; i < arr.length; i++) total += (arr[i][key] || 0);
+  return total;
+}
+
+function uniqueSorted(arr, key) {
+  var seen = {}, out = [];
+  for (var i = 0; i < arr.length; i++) {
+    var v = arr[i][key];
+    if (v && !seen[v]) { seen[v] = true; out.push(v); }
+  }
+  return out.sort();
+}
+
+function fmt(n) {
+  if (!n && n !== 0) return '—';
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000) return (n/1000).toFixed(1)+'K';
+  return Math.round(n).toLocaleString();
+}
+
+function fmtMonth(iso) {
+  if (!iso) return '';
+  var parts = iso.split('-');
+  var names = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var m = parseInt(parts[1], 10);
+  return (names[m-1]||parts[1])+' '+parts[0];
+}
+
+function setStatus(type, msg) {
+  var el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status-pill' + (type !== 'ok' ? ' '+type : '');
+}
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+loadData();
+</script>
+</body>
+</html>
