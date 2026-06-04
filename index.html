@@ -119,12 +119,14 @@ var ALL_DATA=[],currentView='all',charts={};
 
 function loadData(){
   setStatus('loading','Cargando...');
-  fetch(CSV_URL).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){
+  var url=CSV_URL+'&t='+Date.now();
+  fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){
     ALL_DATA=parseCSV(text);
     if(!ALL_DATA.length)throw new Error('Sin datos en el Sheets');
     buildNav();buildMonthFilter();render();
-    setStatus('ok',ALL_DATA.length+' registros · live');
-    document.getElementById('page-sub').textContent=ALL_DATA.length+' registros · Google Sheets en vivo';
+    var now=new Date();var hh=now.getHours().toString().padStart(2,'0');var mm=now.getMinutes().toString().padStart(2,'0');
+    setStatus('ok',ALL_DATA.length+' registros · '+hh+':'+mm);
+    document.getElementById('page-sub').textContent=ALL_DATA.length+' registros · actualizado '+hh+':'+mm;
   }).catch(function(e){
     setStatus('error','Error');document.getElementById('page-sub').textContent=e.message;
     document.getElementById('kpi-row').innerHTML='<div class="empty-state" style="grid-column:1/-1">No se pudieron cargar los datos.<br><small>'+e.message+'</small></div>';
@@ -394,6 +396,7 @@ function fmt(n){if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed
 function fmtMonth(iso){if(!iso)return'';var p=iso.split('-');var names=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];return(names[parseInt(p[1],10)-1]||p[1])+' '+p[0];}
 function setStatus(type,msg){var el=document.getElementById('status');el.textContent=msg;el.className='status-pill'+(type!=='ok'?' '+type:'');}
 loadData();
+setInterval(loadData, 5 * 60 * 1000);
 </script>
 </body>
 </html>
