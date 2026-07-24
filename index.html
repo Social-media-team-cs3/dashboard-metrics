@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#F7F7F8;--surface:#FFFFFF;--surface2:#F3F3F6;--border:#E5E5EA;--border2:#D1D1D8;--text:#111118;--text2:#52525E;--text3:#9898A8;--accent:#4F46E5;--accent-lt:#EEF2FF;--green:#059669;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--ig:#C2185B;--tt:#00796B;--radius:10px;--radius-sm:6px;--mono:'DM Mono',monospace}
+:root{--bg:#F7F7F8;--surface:#FFFFFF;--surface2:#F3F3F6;--border:#E5E5EA;--border2:#D1D1D8;--text:#111118;--text2:#52525E;--text3:#9898A8;--accent:#4F46E5;--accent-lt:#EEF2FF;--green:#059669;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--ig:#C2185B;--tt:#00796B;--fb:#1565C0;--gr:#E65100;--radius:10px;--radius-sm:6px;--mono:'DM Mono',monospace}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 .shell{display:flex;min-height:100vh}
 .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
@@ -16,12 +16,17 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .sidebar-logo-name{font-size:13px;font-weight:600;color:var(--text)}
 .sidebar-logo-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
 .sidebar-section{padding:6px 12px 2px;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
-.nav-item{display:flex;align-items:center;gap:8px;padding:8px 20px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:background .1s,color .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-item{display:flex;align-items:center;gap:7px;padding:8px 14px 8px 18px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:background .1s,color .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:var(--accent-lt);color:var(--accent);border-left-color:var(--accent);font-weight:500}
 .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.plat-tag{font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:3px;margin-left:auto;flex-shrink:0}
-.plat-ig{background:#FCE4EC;color:var(--ig)}.plat-tt{background:#E0F2F1;color:var(--tt)}.plat-both{background:var(--surface2);color:var(--text3)}
+.plat-tags{display:flex;gap:3px;margin-left:auto;flex-shrink:0}
+.plat-tag{font-size:9px;font-family:var(--mono);padding:1px 4px;border-radius:3px;line-height:1.5;border:1px solid transparent}
+.on-ig{background:#FCE4EC;color:var(--ig);border-color:#F8BBD0}
+.on-tt{background:#E0F2F1;color:var(--tt);border-color:#B2DFDB}
+.on-fb{background:#E3F2FD;color:var(--fb);border-color:#BBDEFB}
+.on-gr{background:#FFF3E0;color:var(--gr);border-color:#FFCC80}
+.tag-off{background:transparent;color:#C6C6D2;border-color:var(--border)}
 .main{flex:1;min-width:0;padding:32px 28px}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
 .page-title{font-size:22px;font-weight:600;letter-spacing:-.02em}
@@ -40,8 +45,9 @@ select:focus{border-color:var(--accent)}
 .kpi-val{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
 .kpi-delta{font-size:11px;font-family:var(--mono);display:flex;align-items:center;gap:3px}
 .up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text3)}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .charts-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.card-badge.badge-gr{background:#FFF3E0;color:var(--gr);border-color:#FFCC80}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;animation:fadeIn .35s ease both}
 .card-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
 .card-title{font-size:13px;font-weight:500}.card-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
@@ -54,7 +60,7 @@ tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:var(--surface2)}
 .prop-cell{color:var(--text);font-weight:500;font-family:'Inter',sans-serif;font-size:12px}
 .plat-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
-.pill-ig{background:#FCE4EC;color:var(--ig)}.pill-tt{background:#E0F2F1;color:var(--tt)}
+.pill-ig{background:#FCE4EC;color:var(--ig)}.pill-tt{background:#E0F2F1;color:var(--tt)}.pill-fb{background:#E3F2FD;color:var(--fb)}.pill-gr{background:#FFF3E0;color:var(--gr)}
 .eng-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
 .eng-good{background:var(--green-lt);color:var(--green)}.eng-mid{background:var(--amber-lt);color:var(--amber)}.eng-low{background:var(--red-lt);color:var(--red)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
@@ -89,21 +95,22 @@ tbody tr:hover td{background:var(--surface2)}
       </div>
       <div class="header-controls">
         <select id="prop-filter-mobile" class="mobile-prop" onchange="setView(this.value)"><option value="all">Todas las propiedades</option></select>
-        <select id="plat-filter" onchange="render()"><option value="ALL">Instagram + TikTok</option><option value="Instagram">Solo Instagram</option><option value="TikTok">Solo TikTok</option></select>
+        <select id="plat-filter" onchange="render()"><option value="ALL">Todas las redes</option><option value="Instagram">Solo Instagram</option><option value="TikTok">Solo TikTok</option><option value="Facebook">Solo Facebook</option></select>
         <select id="month-filter" onchange="render()"><option value="ALL">Todos los meses</option></select>
         <div class="status-pill loading" id="status">Cargando...</div>
       </div>
     </div>
     <div class="kpi-row" id="kpi-row"><div class="empty-state" style="grid-column:1/-1">Cargando datos desde Google Sheets...</div></div>
-    <div class="charts-grid">
+    <div class="charts-grid" id="row-charts">
       <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-seg-title">Seguidores</div><div class="card-sub" id="chart-seg-sub">evolución mensual</div></div><span class="card-badge">FOLLOWERS</span></div><div style="height:200px"><canvas id="c-followers"></canvas></div></div>
       <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-views-title">Views</div><div class="card-sub" id="chart-views-sub">alcance mensual</div></div><span class="card-badge">REACH</span></div><div style="height:200px"><canvas id="c-views"></canvas></div></div>
+      <div class="card" id="reviews-card"><div class="card-hd"><div><div class="card-title">Google Reviews</div><div class="card-sub" id="chart-gr-sub">total acumulado</div></div><span class="card-badge badge-gr">REVIEWS</span></div><div style="height:200px"><canvas id="c-reviews"></canvas></div></div>
     </div>
-    <div class="charts-grid-3">
+    <div class="charts-grid-3" id="row-charts3">
       <div class="card" id="likes-card"><div class="card-hd"><div><div class="card-title">Likes por propiedad</div><div class="card-sub">total del período</div></div></div><div style="height:180px"><canvas id="c-likes"></canvas></div></div>
       <div class="card"><div class="card-hd"><div><div class="card-title">Engagement rate</div><div class="card-sub">likes / views × 100</div></div></div><div style="height:180px"><canvas id="c-engagement"></canvas></div></div>
       <div class="card"><div class="card-hd"><div><div class="card-title">Split plataformas</div><div class="card-sub">por views totales</div></div></div><div style="height:140px"><canvas id="c-donut"></canvas></div>
-        <div class="legend" style="justify-content:center"><div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div><div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div></div>
+        <div class="legend" style="justify-content:center"><div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div><div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div><div class="leg"><div class="leg-dot" style="background:#1565C0"></div>Facebook</div></div>
       </div>
     </div>
     <div class="card"><div class="card-hd"><div><div class="card-title">Detalle</div><div class="card-sub" id="tbl-sub">—</div></div></div>
@@ -112,7 +119,34 @@ tbody tr:hover td{background:var(--surface2)}
   </main>
 </div>
 <script>
-var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR92sBv-5HnZBdT5W--fpP1Qd-VlAO6XCF-V_V6lWLfVpT0p4usMWahe5gte_WjZAnhQZ0mixtLO7xn/pub?gid=1973962386&single=true&output=csv';
+var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-waQPHqtgLCkjf0v9Fz8WXPJEHFpfK15el2oVLyJIcsDbqE05lhGfHOg1ImyXng/pub?gid=894203016&single=true&output=csv';
+
+// ── Plataformas ──
+// Redes sociales: entran en TODOS los KPIs, charts y tabla.
+var SOCIAL=['Instagram','TikTok','Facebook'];
+// Google Reviews va aparte, en su propia card.
+var REVIEWS_PLAT='Google Reviews';
+// Columna del tracker donde vive el conteo de reseñas.
+// 'seguidores' = total acumulado de reseñas. Si lo llenas en otra fila, cambia esto.
+var REVIEW_FIELD='seguidores';
+// 'latest' = el acumulado toma el ultimo mes con dato. 'sum' = suma todos los meses.
+var REVIEW_MODE='latest';
+
+var PLAT_COLORS={'Instagram':'#C2185B','TikTok':'#00796B','Facebook':'#1565C0','Google Reviews':'#E65100'};
+var PLAT_PILL={'Instagram':'pill-ig','TikTok':'pill-tt','Facebook':'pill-fb','Google Reviews':'pill-gr'};
+var PLAT_ABBR={'Instagram':'IG','TikTok':'TT','Facebook':'FB','Google Reviews':'GR'};
+var PLAT_ON={'Instagram':'on-ig','TikTok':'on-tt','Facebook':'on-fb','Google Reviews':'on-gr'};
+var TAG_PLATS=['Instagram','TikTok','Facebook','Google Reviews'];
+
+// Un canal esta "prendido" si tiene al menos un valor > 0.
+function hasData(prop,plat){
+  var f=plat===REVIEWS_PLAT?[REVIEW_FIELD]:['seguidores','views','likes','posts'];
+  return ALL_DATA.some(function(r){
+    if(r['propiedad']!==prop||r['plataforma']!==plat)return false;
+    for(var i=0;i<f.length;i++){if(r[f[i]]>0)return true;}
+    return false;
+  });
+}
 var PROP_COLORS={'McKenzie':'#4F46E5','The Reserve at Cool Springs':'#9D174D','The Gateway Village':'#166534','Legends at Armour Avenue':'#92400E','Legacy':'#1D4ED8','Winding Springs':'#991B1B','Ascend':'#14532D','CS3 Investments':'#3730A3'};
 var FB=['#4F46E5','#9D174D','#166534','#92400E','#1D4ED8','#991B1B','#14532D','#3730A3'];
 var ALL_DATA=[],currentView='all',charts={};
@@ -153,16 +187,27 @@ function parseCSV(text){
 function splitLine(line){var out=[],cur='',inQ=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){out.push(cur);cur='';continue;}cur+=c;}out.push(cur);return out;}
 
 // ── FILTERS ──
+function isSocial(r){return SOCIAL.indexOf(r['plataforma'])!==-1;}
+function isReview(r){return r['plataforma']===REVIEWS_PLAT;}
+
+// Datos sociales (IG + TT + FB). Google Reviews queda fuera siempre.
 function getFiltered(){
   var plat=document.getElementById('plat-filter').value,month=document.getElementById('month-filter').value;
   return ALL_DATA.filter(function(r){
-    return(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&(month==='ALL'||r['fecha']===month);
+    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&(month==='ALL'||r['fecha']===month);
   });
 }
 function getForMonth(month){
   var plat=document.getElementById('plat-filter').value;
   return ALL_DATA.filter(function(r){
-    return(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&r['fecha']===month;
+    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&r['fecha']===month;
+  });
+}
+// Google Reviews: no lo afecta el filtro de plataforma, solo propiedad y mes.
+function getReviews(){
+  var month=document.getElementById('month-filter').value;
+  return ALL_DATA.filter(function(r){
+    return isReview(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
   });
 }
 
@@ -176,9 +221,14 @@ function buildNav(){
   var props=uniqueSorted(ALL_DATA,'propiedad');var container=document.getElementById('nav-props');container.innerHTML='';
   for(var i=0;i<props.length;i++){
     var p=props[i];if(!p)continue;
-    var plats=uniqueSorted(ALL_DATA.filter(function(r){return r['propiedad']===p}),'plataforma');
-    var hasIG=plats.indexOf('Instagram')!==-1,hasTT=plats.indexOf('TikTok')!==-1;
-    var tag=hasIG&&hasTT?'<span class="plat-tag plat-both">IG·TT</span>':hasIG?'<span class="plat-tag plat-ig">IG</span>':'<span class="plat-tag plat-tt">TT</span>';
+    // Los 4 canales siempre se muestran. Con datos > 0 van prendidos, si no, apagados.
+    var tag='<div class="plat-tags">';
+    for(var s2=0;s2<TAG_PLATS.length;s2++){
+      var pl=TAG_PLATS[s2];
+      var on=hasData(p,pl);
+      tag+='<span class="plat-tag '+(on?PLAT_ON[pl]:'tag-off')+'" title="'+pl+(on?'':' — sin datos')+'">'+PLAT_ABBR[pl]+'</span>';
+    }
+    tag+='</div>';
     var color=PROP_COLORS[p]||FB[i%FB.length];var el=document.createElement('div');el.className='nav-item';el.setAttribute('data-prop',p);
     el.innerHTML='<div class="nav-dot" style="background:'+color+'"></div><span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:12px">'+p+'</span>'+tag;
     el.onclick=(function(prop){return function(){setView(prop)};})(p);container.appendChild(el);
@@ -225,6 +275,8 @@ function render(){
 
   renderEngagement(data);renderDonut(data);renderTable(data);
   document.getElementById('tbl-sub').textContent=data.length+' registros';
+
+  renderReviews(isSpecificMonth);
 }
 
 // ── KPIs — no Seguidores card ──
@@ -321,8 +373,8 @@ function renderBar(chartId,data,field,canvasId){
     var plats=uniqueSorted(data,'plataforma');
     labels=plats;
     vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),field)});
-    colors=plats.map(function(pl){return pl==='Instagram'?'#C2185B40':'#00796B40'});
-    borders=plats.map(function(pl){return pl==='Instagram'?'#C2185B':'#00796B'});
+    colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});
+    borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});
   }
 
   charts[chartId]=new Chart(document.getElementById(canvasId),{type:'bar',
@@ -361,11 +413,54 @@ function renderEngagement(data){
 
 function renderDonut(data){
   destroyChart('donut');
-  var ig=sumField(data.filter(function(r){return r['plataforma']==='Instagram'}),'views');
-  var tt=sumField(data.filter(function(r){return r['plataforma']==='TikTok'}),'views');
+  var vals=SOCIAL.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views');});
   charts.donut=new Chart(document.getElementById('c-donut'),{type:'doughnut',
-    data:{labels:['Instagram','TikTok'],datasets:[{data:[ig,tt],backgroundColor:['#C2185B22','#00796B22'],borderColor:['#C2185B','#00796B'],borderWidth:1.5,hoverOffset:4}]},
+    data:{labels:SOCIAL,datasets:[{data:vals,
+      backgroundColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]+'22'}),
+      borderColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]}),borderWidth:1.5,hoverOffset:4}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.parsed)}}}}}
+  });
+}
+
+// ── GOOGLE REVIEWS ──
+// Devuelve el conteo de reseñas de una propiedad segun REVIEW_MODE.
+function reviewCount(rows){
+  if(!rows.length)return 0;
+  if(REVIEW_MODE==='sum')return sumField(rows,REVIEW_FIELD);
+  // 'latest': ultimo mes que tenga un valor > 0
+  var sorted=rows.slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
+  for(var i=sorted.length-1;i>=0;i--){if(sorted[i][REVIEW_FIELD]>0)return sorted[i][REVIEW_FIELD];}
+  return 0;
+}
+
+function renderReviews(isSpecificMonth){
+  destroyChart('reviews');
+  var rev=getReviews();
+  var props=uniqueSorted(rev,'propiedad');
+  var labels,vals;
+
+  if(currentView==='all'){
+    labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
+    vals=props.map(function(p){return reviewCount(rev.filter(function(r){return r['propiedad']===p}));});
+  }else{
+    // Una sola propiedad: evolucion mes a mes
+    var months=uniqueSorted(rev,'fecha');
+    labels=months.map(fmtMonth);
+    vals=months.map(function(m){
+      var row=rev.filter(function(r){return r['fecha']===m});
+      return row.length?(row[0][REVIEW_FIELD]||0):0;
+    });
+  }
+
+  var total=currentView==='all'?vals.reduce(function(a,b){return a+b},0):reviewCount(rev);
+  var periodo=isSpecificMonth?fmtMonth(document.getElementById('month-filter').value):'total acumulado';
+  document.getElementById('chart-gr-sub').textContent=(total>0?fmt(total)+' reseñas · ':'')+periodo;
+
+  charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',
+    data:{labels:labels,datasets:[{data:vals,backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:function(c){return fmt(c.parsed.y)+' reseñas'}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
   });
 }
 
@@ -378,7 +473,7 @@ function renderTable(data){
   for(var i=0;i<Math.min(sorted.length,80);i++){
     var r=sorted[i];var eng=r['views']>0?(r['likes']/r['views']*100):0;
     var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';
-    var platCls=r['plataforma']==='Instagram'?'pill-ig':'pill-tt';
+    var platCls=PLAT_PILL[r['plataforma']]||'pill-ig';
     var key=r['propiedad']+'|'+r['plataforma'];
     var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
     var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}
