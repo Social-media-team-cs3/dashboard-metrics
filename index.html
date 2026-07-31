@@ -45,13 +45,26 @@ select:focus{border-color:var(--accent)}
 .kpi-val{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
 .kpi-delta{font-size:11px;font-family:var(--mono);display:flex;align-items:center;gap:3px}
 .up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text3)}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-.charts-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-.card-badge.badge-gr{background:#FFF3E0;color:var(--gr);border-color:#FFCC80}
+
+/* LINE 1: top charts row */
+.row-line1{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;animation:fadeIn .35s ease both}
 .card-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
 .card-title{font-size:13px;font-weight:500}.card-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
 .card-badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE}
+.card-badge.badge-gr{background:#FFF3E0;color:var(--gr);border-color:#FFCC80}
+
+/* PLATFORM ROWS (lines 2,3,4) */
+.plat-section{border-radius:var(--radius);padding:16px;margin-bottom:14px;border:1px solid var(--border)}
+.plat-section-hd{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.plat-section-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.plat-section-label{font-size:13px;font-weight:600;letter-spacing:-.01em}
+.plat-section-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.plat-section .card{border:1px solid rgba(0,0,0,.06)}
+.plat-ig{background:rgba(194,24,91,.04);border-color:rgba(194,24,91,.12)}
+.plat-tt{background:rgba(0,121,107,.04);border-color:rgba(0,121,107,.12)}
+.plat-fb{background:rgba(21,101,192,.04);border-color:rgba(21,101,192,.12)}
+
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{text-align:left;padding:9px 12px;font-size:10px;font-family:var(--mono);letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
@@ -69,8 +82,9 @@ tbody tr:hover td{background:var(--surface2)}
 .empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-family:var(--mono);font-size:12px;line-height:2}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .mobile-prop{display:none}
-@media(max-width:1000px){.sidebar{display:none}.mobile-prop{display:block}.charts-grid{grid-template-columns:1fr}.charts-grid-3{grid-template-columns:1fr}}
-@media(max-width:640px){.main{padding:16px}.kpi-row{grid-template-columns:1fr 1fr}}
+@media(max-width:1100px){.row-line1{grid-template-columns:1fr 1fr 1fr}.plat-section-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:1000px){.sidebar{display:none}.mobile-prop{display:block}.row-line1{grid-template-columns:1fr 1fr}.plat-section-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.main{padding:16px}.kpi-row{grid-template-columns:1fr 1fr}.row-line1{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -95,24 +109,29 @@ tbody tr:hover td{background:var(--surface2)}
       </div>
       <div class="header-controls">
         <select id="prop-filter-mobile" class="mobile-prop" onchange="setView(this.value)"><option value="all">Todas las propiedades</option></select>
-        <select id="plat-filter" onchange="render()"><option value="ALL">Todas las redes</option><option value="Instagram">Solo Instagram</option><option value="TikTok">Solo TikTok</option><option value="Facebook">Solo Facebook</option></select>
         <select id="month-filter" onchange="render()"><option value="ALL">Todos los meses</option></select>
         <div class="status-pill loading" id="status">Cargando...</div>
       </div>
     </div>
+
+    <!-- KPI ROW -->
     <div class="kpi-row" id="kpi-row"><div class="empty-state" style="grid-column:1/-1">Cargando datos desde Google Sheets...</div></div>
-    <div class="charts-grid" id="row-charts">
-      <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-seg-title">Seguidores</div><div class="card-sub" id="chart-seg-sub">evolución mensual</div></div><span class="card-badge">FOLLOWERS</span></div><div style="height:200px"><canvas id="c-followers"></canvas></div></div>
-      <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-views-title">Views</div><div class="card-sub" id="chart-views-sub">alcance mensual</div></div><span class="card-badge">REACH</span></div><div style="height:200px"><canvas id="c-views"></canvas></div></div>
-      <div class="card" id="reviews-card"><div class="card-hd"><div><div class="card-title">Google Reviews</div><div class="card-sub" id="chart-gr-sub">total acumulado</div></div><span class="card-badge badge-gr">REVIEWS</span></div><div style="height:200px"><canvas id="c-reviews"></canvas></div></div>
-    </div>
-    <div class="charts-grid-3" id="row-charts3">
-      <div class="card" id="likes-card"><div class="card-hd"><div><div class="card-title">Likes por propiedad</div><div class="card-sub">total del período</div></div></div><div style="height:180px"><canvas id="c-likes"></canvas></div></div>
-      <div class="card"><div class="card-hd"><div><div class="card-title">Engagement rate</div><div class="card-sub">likes / views × 100</div></div></div><div style="height:180px"><canvas id="c-engagement"></canvas></div></div>
+
+    <!-- LINE 1: Seguidores total, Views total, Engagement, Split, Google Reviews -->
+    <div class="row-line1" id="row-line1">
+      <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-seg-title">Seguidores</div><div class="card-sub" id="chart-seg-sub">total acumulado</div></div><span class="card-badge">FOLLOWERS</span></div><div style="height:200px"><canvas id="c-followers"></canvas></div></div>
+      <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-views-title">Views</div><div class="card-sub" id="chart-views-sub">total acumulado</div></div><span class="card-badge">REACH</span></div><div style="height:200px"><canvas id="c-views"></canvas></div></div>
+      <div class="card"><div class="card-hd"><div><div class="card-title">Engagement rate</div><div class="card-sub">likes / views × 100</div></div></div><div style="height:200px"><canvas id="c-engagement"></canvas></div></div>
       <div class="card"><div class="card-hd"><div><div class="card-title">Split plataformas</div><div class="card-sub">por views totales</div></div></div><div style="height:140px"><canvas id="c-donut"></canvas></div>
         <div class="legend" style="justify-content:center"><div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div><div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div><div class="leg"><div class="leg-dot" style="background:#1565C0"></div>Facebook</div></div>
       </div>
+      <div class="card" id="reviews-card"><div class="card-hd"><div><div class="card-title">Google Reviews</div><div class="card-sub" id="chart-gr-sub">total acumulado</div></div><span class="card-badge badge-gr">REVIEWS</span></div><div style="height:200px"><canvas id="c-reviews"></canvas></div></div>
     </div>
+
+    <!-- LINES 2,3,4: Per-platform sections -->
+    <div id="platform-rows"></div>
+
+    <!-- DETAIL TABLE -->
     <div class="card"><div class="card-hd"><div><div class="card-title">Detalle</div><div class="card-sub" id="tbl-sub">—</div></div></div>
       <div class="tbl-wrap"><table><thead><tr><th>PROPIEDAD</th><th>PLATAFORMA</th><th>MES</th><th>SEGUIDORES</th><th>Δ SEG.</th><th>VIEWS</th><th>LIKES</th><th>COMENTARIOS</th><th>CLICKS</th><th>POSTS</th><th>ENGAGEMENT</th></tr></thead><tbody id="tbl-body"></tbody></table></div>
     </div>
@@ -121,15 +140,9 @@ tbody tr:hover td{background:var(--surface2)}
 <script>
 var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-waQPHqtgLCkjf0v9Fz8WXPJEHFpfK15el2oVLyJIcsDbqE05lhGfHOg1ImyXng/pub?gid=894203016&single=true&output=csv';
 
-// ── Plataformas ──
-// Redes sociales: entran en TODOS los KPIs, charts y tabla.
 var SOCIAL=['Instagram','TikTok','Facebook'];
-// Google Reviews va aparte, en su propia card.
 var REVIEWS_PLAT='Google Reviews';
-// Columna del tracker donde vive el conteo de reseñas.
-// 'seguidores' = total acumulado de reseñas. Si lo llenas en otra fila, cambia esto.
 var REVIEW_FIELD='seguidores';
-// 'latest' = el acumulado toma el ultimo mes con dato. 'sum' = suma todos los meses.
 var REVIEW_MODE='latest';
 
 var PLAT_COLORS={'Instagram':'#C2185B','TikTok':'#00796B','Facebook':'#1565C0','Google Reviews':'#E65100'};
@@ -137,8 +150,8 @@ var PLAT_PILL={'Instagram':'pill-ig','TikTok':'pill-tt','Facebook':'pill-fb','Go
 var PLAT_ABBR={'Instagram':'IG','TikTok':'TT','Facebook':'FB','Google Reviews':'GR'};
 var PLAT_ON={'Instagram':'on-ig','TikTok':'on-tt','Facebook':'on-fb','Google Reviews':'on-gr'};
 var TAG_PLATS=['Instagram','TikTok','Facebook','Google Reviews'];
+var PLAT_CSS_CLASS={'Instagram':'plat-ig','TikTok':'plat-tt','Facebook':'plat-fb'};
 
-// Un canal esta "prendido" si tiene al menos un valor > 0.
 function hasData(prop,plat){
   var f=plat===REVIEWS_PLAT?[REVIEW_FIELD]:['seguidores','views','likes','posts'];
   return ALL_DATA.some(function(r){
@@ -190,20 +203,23 @@ function splitLine(line){var out=[],cur='',inQ=false;for(var i=0;i<line.length;i
 function isSocial(r){return SOCIAL.indexOf(r['plataforma'])!==-1;}
 function isReview(r){return r['plataforma']===REVIEWS_PLAT;}
 
-// Datos sociales (IG + TT + FB). Google Reviews queda fuera siempre.
 function getFiltered(){
-  var plat=document.getElementById('plat-filter').value,month=document.getElementById('month-filter').value;
+  var month=document.getElementById('month-filter').value;
   return ALL_DATA.filter(function(r){
-    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&(month==='ALL'||r['fecha']===month);
+    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
+  });
+}
+function getFilteredByPlatform(plat){
+  var month=document.getElementById('month-filter').value;
+  return ALL_DATA.filter(function(r){
+    return r['plataforma']===plat&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
   });
 }
 function getForMonth(month){
-  var plat=document.getElementById('plat-filter').value;
   return ALL_DATA.filter(function(r){
-    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(plat==='ALL'||r['plataforma']===plat)&&r['fecha']===month;
+    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&r['fecha']===month;
   });
 }
-// Google Reviews: no lo afecta el filtro de plataforma, solo propiedad y mes.
 function getReviews(){
   var month=document.getElementById('month-filter').value;
   return ALL_DATA.filter(function(r){
@@ -221,11 +237,9 @@ function buildNav(){
   var props=uniqueSorted(ALL_DATA,'propiedad');var container=document.getElementById('nav-props');container.innerHTML='';
   for(var i=0;i<props.length;i++){
     var p=props[i];if(!p)continue;
-    // Los 4 canales siempre se muestran. Con datos > 0 van prendidos, si no, apagados.
     var tag='<div class="plat-tags">';
     for(var s2=0;s2<TAG_PLATS.length;s2++){
-      var pl=TAG_PLATS[s2];
-      var on=hasData(p,pl);
+      var pl=TAG_PLATS[s2];var on=hasData(p,pl);
       tag+='<span class="plat-tag '+(on?PLAT_ON[pl]:'tag-off')+'" title="'+pl+(on?'':' — sin datos')+'">'+PLAT_ABBR[pl]+'</span>';
     }
     tag+='</div>';
@@ -233,7 +247,6 @@ function buildNav(){
     el.innerHTML='<div class="nav-dot" style="background:'+color+'"></div><span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:12px">'+p+'</span>'+tag;
     el.onclick=(function(prop){return function(){setView(prop)};})(p);container.appendChild(el);
   }
-  // Also populate mobile dropdown
   var mobSel=document.getElementById('prop-filter-mobile');
   if(mobSel){while(mobSel.options.length>1)mobSel.remove(1);
     for(var k=0;k<props.length;k++){if(!props[k])continue;var mo=document.createElement('option');mo.value=props[k];mo.textContent=props[k];mobSel.appendChild(mo);}
@@ -256,30 +269,26 @@ function render(){
 
   renderKPIs(data);
 
-  // Charts: specific month → bars, all months → lines
-  if(isSpecificMonth){
-    renderBar('followers',data,'seguidores','c-followers');
-    renderBar('views',data,'views','c-views');
-    document.getElementById('chart-seg-sub').textContent=fmtMonth(monthSel);
-    document.getElementById('chart-views-sub').textContent=fmtMonth(monthSel);
-  } else {
-    renderLine('followers',data,'seguidores','c-followers');
-    renderLine('views',data,'views','c-views');
-    document.getElementById('chart-seg-sub').textContent='evolución mensual';
-    document.getElementById('chart-views-sub').textContent='alcance mensual';
-  }
-
-  var likesCard=document.getElementById('likes-card');
-  if(currentView!=='all'){likesCard.style.display='none';destroyChart('likes');}
-  else{likesCard.style.display='';renderBars('likes',data,'likes','c-likes');}
-
-  renderEngagement(data);renderDonut(data);renderTable(data);
-  document.getElementById('tbl-sub').textContent=data.length+' registros';
-
+  // LINE 1 charts
+  renderFollowersTotal(data,isSpecificMonth,monthSel);
+  renderViewsTotal(data,isSpecificMonth,monthSel);
+  renderEngagement(data);
+  renderDonut(data);
   renderReviews(isSpecificMonth);
+
+  // LINES 2,3,4 — per-platform sections
+  renderPlatformRows(isSpecificMonth,monthSel);
+
+  // DETAIL TABLE
+  if(isSpecificMonth){
+    renderTable(data);
+    document.getElementById('tbl-sub').textContent=data.length+' registros';
+  } else {
+    renderBestMonthTable();
+  }
 }
 
-// ── KPIs — no Seguidores card ──
+// ── KPIs ──
 function renderKPIs(data){
   var monthSel=document.getElementById('month-filter').value;
   var allMonths=uniqueSorted(ALL_DATA,'fecha');
@@ -295,7 +304,6 @@ function renderKPIs(data){
   var targetRows=targetMonth?getForMonth(targetMonth):[];
   var prevRows=prevMonth?getForMonth(prevMonth):[];
 
-  // No Seguidores — only flow metrics
   var metrics=[
     {label:'Views',      key:'views'},
     {label:'Likes',      key:'likes'},
@@ -309,14 +317,12 @@ function renderKPIs(data){
     var m=metrics[i];var displayVal,deltaPercent,compLabel;
 
     if(monthSel==='ALL'){
-      // All months: show total sum, delta = last vs prev month
       displayVal=sumField(data,m.key);
       var lastVal=sumField(targetRows,m.key);
       var pv=sumField(prevRows,m.key);
       deltaPercent=pv>0?((lastVal-pv)/pv*100):null;
       compLabel='Total 2026';
     } else {
-      // Specific month
       displayVal=sumField(targetRows,m.key);
       var pv2=sumField(prevRows,m.key);
       deltaPercent=pv2>0?((displayVal-pv2)/pv2*100):null;
@@ -338,64 +344,76 @@ function renderKPIs(data){
 Chart.defaults.color='#9898A8';Chart.defaults.font.family="'DM Mono',monospace";Chart.defaults.font.size=10;Chart.defaults.borderColor='#E5E5EA';
 function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 
-// Line chart — for "all months" view
-function renderLine(chartId,data,field,canvasId){
-  destroyChart(chartId);
-  var months=uniqueSorted(data,'fecha'),props=uniqueSorted(data,'propiedad');
-  var datasets=props.map(function(p,i){
-    return{label:p,data:months.map(function(m){
-      var v=sumField(data.filter(function(r){return r['propiedad']===p&&r['fecha']===m}),field);
-      return v>0?v:null;
-    }),borderColor:PROP_COLORS[p]||FB[i%8],backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,tension:0.3,spanGaps:true};
-  });
-  charts[chartId]=new Chart(document.getElementById(canvasId),{type:'line',
-    data:{labels:months.map(fmtMonth),datasets:datasets},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,padding:10,font:{size:10}}}},
-      scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
-  });
-}
-
-// Bar chart — for specific month view (one bar per property or per platform)
-function renderBar(chartId,data,field,canvasId){
-  destroyChart(chartId);
-  // If viewing all properties: bars = one per property
-  // If viewing one property: bars = one per platform
-  var labels,vals,colors,borders;
-
-  if(currentView==='all'){
-    var props=uniqueSorted(data,'propiedad');
-    labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
-    vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),field)});
-    colors=props.map(function(p,i){return(PROP_COLORS[p]||FB[i%8])+'40'});
-    borders=props.map(function(p,i){return PROP_COLORS[p]||FB[i%8]});
+// FOLLOWERS TOTAL — sum ALL channels per month (line) or per property (bar)
+function renderFollowersTotal(data,isSpecificMonth,monthSel){
+  destroyChart('followers');
+  if(isSpecificMonth){
+    // Bar: one bar per property (or per platform if single property)
+    var labels,vals,colors,borders;
+    if(currentView==='all'){
+      var props=uniqueSorted(data,'propiedad');
+      labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
+      vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});
+      colors=props.map(function(p,i){return(PROP_COLORS[p]||FB[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB[i%8]});
+    } else {
+      var plats=uniqueSorted(data,'plataforma');labels=plats;
+      vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'seguidores')});
+      colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});
+    }
+    charts.followers=new Chart(document.getElementById('c-followers'),{type:'bar',
+      data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('chart-seg-sub').textContent='total seguidores · '+fmtMonth(monthSel);
   } else {
-    var plats=uniqueSorted(data,'plataforma');
-    labels=plats;
-    vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),field)});
-    colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});
-    borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});
+    // Line: total followers summed across all channels per month
+    var months=uniqueSorted(data,'fecha');
+    var totalPerMonth=months.map(function(m){
+      return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores');
+    });
+    charts.followers=new Chart(document.getElementById('c-followers'),{type:'line',
+      data:{labels:months.map(fmtMonth),datasets:[{label:'Total seguidores',data:totalPerMonth,borderColor:PROP_COLORS['CS3 Investments']||'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('chart-seg-sub').textContent='suma total · evolución mensual';
   }
-
-  charts[chartId]=new Chart(document.getElementById(canvasId),{type:'bar',
-    data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
-  });
 }
 
-// Bar chart for likes (always bar, only on "all properties")
-function renderBars(chartId,data,field,canvasId){
-  destroyChart(chartId);
-  var props=uniqueSorted(data,'propiedad');
-  var vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),field)});
-  charts[chartId]=new Chart(document.getElementById(canvasId),{type:'bar',
-    data:{labels:props.map(function(p){return p.length>13?p.slice(0,12)+'…':p}),
-      datasets:[{data:vals,backgroundColor:props.map(function(p,i){return(PROP_COLORS[p]||FB[i%8])+'28'}),
-        borderColor:props.map(function(p,i){return PROP_COLORS[p]||FB[i%8]}),borderWidth:1,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
-  });
+// VIEWS TOTAL — sum ALL channels per month (line) or per property (bar)
+function renderViewsTotal(data,isSpecificMonth,monthSel){
+  destroyChart('views');
+  if(isSpecificMonth){
+    var labels,vals,colors,borders;
+    if(currentView==='all'){
+      var props=uniqueSorted(data,'propiedad');
+      labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
+      vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});
+      colors=props.map(function(p,i){return(PROP_COLORS[p]||FB[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB[i%8]});
+    } else {
+      var plats=uniqueSorted(data,'plataforma');labels=plats;
+      vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views')});
+      colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});
+    }
+    charts.views=new Chart(document.getElementById('c-views'),{type:'bar',
+      data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('chart-views-sub').textContent='total views · '+fmtMonth(monthSel);
+  } else {
+    var months=uniqueSorted(data,'fecha');
+    var totalPerMonth=months.map(function(m){
+      return sumField(data.filter(function(r){return r['fecha']===m}),'views');
+    });
+    charts.views=new Chart(document.getElementById('c-views'),{type:'line',
+      data:{labels:months.map(fmtMonth),datasets:[{label:'Total views',data:totalPerMonth,borderColor:'#059669',backgroundColor:'rgba(5,150,105,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('chart-views-sub').textContent='suma total · evolución mensual';
+  }
 }
 
 function renderEngagement(data){
@@ -423,11 +441,9 @@ function renderDonut(data){
 }
 
 // ── GOOGLE REVIEWS ──
-// Devuelve el conteo de reseñas de una propiedad segun REVIEW_MODE.
 function reviewCount(rows){
   if(!rows.length)return 0;
   if(REVIEW_MODE==='sum')return sumField(rows,REVIEW_FIELD);
-  // 'latest': ultimo mes que tenga un valor > 0
   var sorted=rows.slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
   for(var i=sorted.length-1;i>=0;i--){if(sorted[i][REVIEW_FIELD]>0)return sorted[i][REVIEW_FIELD];}
   return 0;
@@ -443,7 +459,6 @@ function renderReviews(isSpecificMonth){
     labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
     vals=props.map(function(p){return reviewCount(rev.filter(function(r){return r['propiedad']===p}));});
   }else{
-    // Una sola propiedad: evolucion mes a mes
     var months=uniqueSorted(rev,'fecha');
     labels=months.map(fmtMonth);
     vals=months.map(function(m){
@@ -464,7 +479,147 @@ function renderReviews(isSpecificMonth){
   });
 }
 
-// ── TABLE ──
+// ── PLATFORM ROWS (Lines 2, 3, 4) ──
+function renderPlatformRows(isSpecificMonth,monthSel){
+  var container=document.getElementById('platform-rows');
+
+  // Destroy existing platform charts
+  for(var pi=0;pi<SOCIAL.length;pi++){
+    destroyChart('plat-seg-'+SOCIAL[pi]);
+    destroyChart('plat-views-'+SOCIAL[pi]);
+    destroyChart('plat-eng-'+SOCIAL[pi]);
+  }
+
+  var html='';
+  for(var pi=0;pi<SOCIAL.length;pi++){
+    var plat=SOCIAL[pi];
+    var cssClass=PLAT_CSS_CLASS[plat]||'';
+    html+='<div class="plat-section '+cssClass+'">';
+    html+='<div class="plat-section-hd"><div class="plat-section-dot" style="background:'+PLAT_COLORS[plat]+'"></div><div class="plat-section-label">'+plat+'</div></div>';
+    html+='<div class="plat-section-grid">';
+    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Seguidores</div><div class="card-sub" id="plat-seg-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-seg-'+plat+'"></canvas></div></div>';
+    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Views</div><div class="card-sub" id="plat-views-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-views-'+plat+'"></canvas></div></div>';
+    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Engagement rate</div><div class="card-sub" id="plat-eng-sub-'+plat+'">likes / views × 100</div></div></div><div style="height:160px"><canvas id="c-plat-eng-'+plat+'"></canvas></div></div>';
+    html+='</div></div>';
+  }
+  container.innerHTML=html;
+
+  // Now render charts for each platform
+  for(var pi=0;pi<SOCIAL.length;pi++){
+    var plat=SOCIAL[pi];
+    var platData=getFilteredByPlatform(plat);
+    renderPlatformChart(plat,platData,isSpecificMonth,monthSel);
+  }
+}
+
+function renderPlatformChart(plat,data,isSpecificMonth,monthSel){
+  var segId='plat-seg-'+plat;
+  var viewsId='plat-views-'+plat;
+  var engId='plat-eng-'+plat;
+  var color=PLAT_COLORS[plat];
+
+  if(isSpecificMonth){
+    // Bar charts: per property (all properties view) or single value (single property)
+    var props=uniqueSorted(data,'propiedad');
+    var labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
+
+    // Seguidores
+    var segVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});
+    charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'bar',
+      data:{labels:labels,datasets:[{data:segVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('plat-seg-sub-'+plat).textContent=fmtMonth(monthSel);
+
+    // Views
+    var viewVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});
+    charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'bar',
+      data:{labels:labels,datasets:[{data:viewVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+    });
+    document.getElementById('plat-views-sub-'+plat).textContent=fmtMonth(monthSel);
+
+    // Engagement
+    var engVals=props.map(function(p){
+      var rows=data.filter(function(r){return r['propiedad']===p});
+      var v=sumField(rows,'views'),l=sumField(rows,'likes');
+      return v>0?parseFloat((l/v*100).toFixed(2)):0;
+    });
+    charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'bar',
+      data:{labels:labels,datasets:[{data:engVals,
+        backgroundColor:engVals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),
+        borderColor:engVals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}
+    });
+  } else {
+    // Line charts: evolution per month
+    var months=uniqueSorted(data,'fecha');
+    if(currentView==='all'){
+      // Sum across all properties per month
+      var segPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores')});
+      var viewsPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views')});
+      var engPerMonth=months.map(function(m){
+        var rows=data.filter(function(r){return r['fecha']===m});
+        var v=sumField(rows,'views'),l=sumField(rows,'likes');
+        return v>0?parseFloat((l/v*100).toFixed(2)):0;
+      });
+
+      charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Seguidores',data:segPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+      });
+      document.getElementById('plat-seg-sub-'+plat).textContent='evolución mensual';
+
+      charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Views',data:viewsPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+      });
+      document.getElementById('plat-views-sub-'+plat).textContent='evolución mensual';
+
+      charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Engagement',data:engPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}
+      });
+    } else {
+      // Single property: line per month (one line)
+      var segPerMonth=months.map(function(m){var rows=data.filter(function(r){return r['fecha']===m});return sumField(rows,'seguidores')});
+      var viewsPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views')});
+      var engPerMonth=months.map(function(m){
+        var rows=data.filter(function(r){return r['fecha']===m});
+        var v=sumField(rows,'views'),l=sumField(rows,'likes');
+        return v>0?parseFloat((l/v*100).toFixed(2)):0;
+      });
+
+      charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Seguidores',data:segPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+      });
+      document.getElementById('plat-seg-sub-'+plat).textContent='evolución mensual';
+
+      charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Views',data:viewsPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}
+      });
+      document.getElementById('plat-views-sub-'+plat).textContent='evolución mensual';
+
+      charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'line',
+        data:{labels:months.map(fmtMonth),datasets:[{label:'Engagement',data:engPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},
+          scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}
+      });
+    }
+  }
+}
+
+// ── TABLE — Standard detail ──
 function renderTable(data){
   var deltaMap={};
   for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}
@@ -482,6 +637,54 @@ function renderTable(data){
     html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+r['plataforma']+'</span></td><td>'+fmtMonth(r['fecha'])+'</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';
   }
   document.getElementById('tbl-body').innerHTML=html;
+}
+
+// ── TABLE — Best month per property+platform ──
+function renderBestMonthTable(){
+  // For each property + platform combo, find the month with the most views
+  var data=getFiltered();
+  var props=uniqueSorted(data,'propiedad');
+  var html='';
+
+  var deltaMap={};
+  for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}
+
+  for(var pi=0;pi<props.length;pi++){
+    var prop=props[pi];
+    for(var si=0;si<SOCIAL.length;si++){
+      var plat=SOCIAL[si];
+      var rows=data.filter(function(r){return r['propiedad']===prop&&r['plataforma']===plat});
+      if(!rows.length)continue;
+
+      // Find best month by views
+      var best=rows[0];
+      for(var ri=1;ri<rows.length;ri++){
+        if(rows[ri]['views']>best['views'])best=rows[ri];
+      }
+      // If all views are 0, try likes
+      if(best['views']===0){
+        for(var ri=1;ri<rows.length;ri++){
+          if(rows[ri]['likes']>best['likes'])best=rows[ri];
+        }
+      }
+
+      var r=best;
+      var eng=r['views']>0?(r['likes']/r['views']*100):0;
+      var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';
+      var platCls=PLAT_PILL[plat]||'pill-ig';
+
+      var key=prop+'|'+plat;
+      var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
+      var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}
+      var dCell='<span style="color:var(--text3)">—</span>';
+      if(idx>0){var diff=r['seguidores']-hist[idx-1]['seguidores'];if(diff!==0){var cls2=diff>0?'up':'down';dCell='<span class="'+cls2+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';}}
+
+      html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+plat+'</span></td><td>'+fmtMonth(r['fecha'])+' ⭐</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';
+    }
+  }
+  document.getElementById('tbl-body').innerHTML=html;
+  var count=document.querySelectorAll('#tbl-body tr').length;
+  document.getElementById('tbl-sub').textContent=count+' registros · mejor mes por canal';
 }
 
 // ── HELPERS ──
