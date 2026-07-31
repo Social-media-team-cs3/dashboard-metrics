@@ -281,9 +281,20 @@ function getFollowersKPI(data,monthSel){
     var mIdx=allMonths.indexOf(targetMonth);
     prevMonth=mIdx>0?allMonths[mIdx-1]:null;
   } else {
-    // "All Months": use the LAST month with data (current snapshot)
-    targetMonth=dataMonths[dataMonths.length-1];
-    prevMonth=dataMonths.length>1?dataMonths[dataMonths.length-2]:null;
+    // "All Months": find the LAST month that has followers > 0
+    targetMonth=null;
+    for(var mi=dataMonths.length-1;mi>=0;mi--){
+      var checkRows=getForMonth(dataMonths[mi]);
+      if(sumField(checkRows,'seguidores')>0){targetMonth=dataMonths[mi];break;}
+    }
+    if(!targetMonth)targetMonth=dataMonths[dataMonths.length-1];
+    // Previous month: last month before targetMonth that has followers > 0
+    var tIdx=dataMonths.indexOf(targetMonth);
+    prevMonth=null;
+    for(var mi2=tIdx-1;mi2>=0;mi2--){
+      var checkRows2=getForMonth(dataMonths[mi2]);
+      if(sumField(checkRows2,'seguidores')>0){prevMonth=dataMonths[mi2];break;}
+    }
   }
 
   var targetRows=targetMonth?getForMonth(targetMonth):[];
