@@ -307,6 +307,65 @@ function getFollowersKPI(data,monthSel){
   return {val:displayVal, delta:deltaPercent, label:compLabel};
 }
 
+// Google Reviews KPI — takes highest month per property, sums across properties
+function getReviewsKPI(monthSel){
+  var allRevData=ALL_DATA.filter(function(r){
+    return isReview(r)&&(currentView==='all'||r['propiedad']===currentView);
+  });
+  var props=uniqueSorted(allRevData,'propiedad');
+  var allMonths=uniqueSorted(allRevData,'fecha');
+
+  if(monthSel!=='ALL'){
+    // Specific month: sum reviews of that month across properties
+    var targetVal=0;var prevVal=0;
+    var mIdx=allMonths.indexOf(monthSel);
+    var prevMonth=mIdx>0?allMonths[mIdx-1]:null;
+    for(var pi=0;pi<props.length;pi++){
+      var p=props[pi];
+      var tRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});
+      targetVal+=tRow.length?(tRow[0][REVIEW_FIELD]||0):0;
+      if(prevMonth){
+        var pRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===prevMonth});
+        prevVal+=pRow.length?(pRow[0][REVIEW_FIELD]||0):0;
+      }
+    }
+    var delta=prevVal>0?((targetVal-prevVal)/prevVal*100):null;
+    return {val:targetVal, delta:delta, label:prevMonth?'vs '+fmtMonth(prevMonth):''};
+  } else {
+    // All Months: for each property take the highest review count (max month), sum across properties
+    var totalVal=0;
+    // For delta: find the two latest months with actual review data > 0
+    var latestMonth=null,prevMonth2=null;
+    for(var mi=allMonths.length-1;mi>=0;mi--){
+      var hasAny=allRevData.some(function(r){return r['fecha']===allMonths[mi]&&r[REVIEW_FIELD]>0});
+      if(hasAny){
+        if(!latestMonth){latestMonth=allMonths[mi];}
+        else if(!prevMonth2){prevMonth2=allMonths[mi];break;}
+      }
+    }
+    var latestVal=0,prevVal2=0;
+    for(var pi=0;pi<props.length;pi++){
+      var p=props[pi];
+      // Highest month for this property
+      var propRows=allRevData.filter(function(r){return r['propiedad']===p});
+      var maxVal=0;
+      for(var ri=0;ri<propRows.length;ri++){if(propRows[ri][REVIEW_FIELD]>maxVal)maxVal=propRows[ri][REVIEW_FIELD];}
+      totalVal+=maxVal;
+      // Latest month value
+      if(latestMonth){
+        var lRow=propRows.filter(function(r){return r['fecha']===latestMonth});
+        latestVal+=lRow.length?(lRow[0][REVIEW_FIELD]||0):0;
+      }
+      if(prevMonth2){
+        var pRow2=propRows.filter(function(r){return r['fecha']===prevMonth2});
+        prevVal2+=pRow2.length?(pRow2[0][REVIEW_FIELD]||0):0;
+      }
+    }
+    var delta2=prevVal2>0?((latestVal-prevVal2)/prevVal2*100):null;
+    return {val:totalVal, delta:delta2, label:latestMonth?fmtMonth(latestMonth):''};
+  }
+}
+
 function renderKPIs(data){
   var monthSel=document.getElementById('month-filter').value;
   var allMonths=uniqueSorted(ALL_DATA,'fecha');
@@ -325,25 +384,32 @@ function renderKPIs(data){
   // Followers KPI — latest month snapshot
   var fol=getFollowersKPI(data,monthSel);
 
-  // Order: Views, Followers, Likes, Clicks, Posts, Comments
+  // Google Reviews KPI
+  var grKpi=getReviewsKPI(monthSel);
+
+  // Order: Views, Followers, Google Reviews, Likes, Clicks, Posts, Comments
   var metrics=[
-    {label:'Views',      key:'views',       special:false},
-    {label:'Followers',  key:'seguidores',  special:true},
-    {label:'Likes',      key:'likes',       special:false},
-    {label:'Clicks',     key:'clicks',      special:false},
-    {label:'Posts',      key:'posts',       special:false},
-    {label:'Comments',   key:'comentarios', special:false}
+    {label:'Views',          key:'views',       special:false},
+    {label:'Followers',      key:'seguidores',  special:'followers'},
+    {label:'Google Reviews', key:null,           special:'reviews'},
+    {label:'Likes',          key:'likes',       special:false},
+    {label:'Clicks',         key:'clicks',      special:false},
+    {label:'Posts',          key:'posts',       special:false},
+    {label:'Comments',       key:'comentarios', special:false}
   ];
 
   var html='';
   for(var i=0;i<metrics.length;i++){
     var m=metrics[i];var displayVal,deltaPercent,compLabel;
 
-    if(m.special){
-      // Followers uses latest-month logic
+    if(m.special==='followers'){
       displayVal=fol.val;
       deltaPercent=fol.delta;
       compLabel=fol.label;
+    } else if(m.special==='reviews'){
+      displayVal=grKpi.val;
+      deltaPercent=grKpi.delta;
+      compLabel=grKpi.label;
     } else if(monthSel==='ALL'){
       displayVal=sumField(data,m.key);
       var lastVal=sumField(targetRows,m.key);
@@ -475,12 +541,29 @@ function reviewCount(rows){
 function renderReviews(isSpecificMonth){
   destroyChart('reviews');
   var rev=getReviews();
+  var monthSel=document.getElementById('month-filter').value;
   var props=uniqueSorted(rev,'propiedad');
-  var labels,vals;
+  var labels,vals,increments=null;
 
   if(currentView==='all'){
     labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
     vals=props.map(function(p){return reviewCount(rev.filter(function(r){return r['propiedad']===p}));});
+
+    // Calculate increments for specific month view
+    if(isSpecificMonth){
+      var allMonths=uniqueSorted(ALL_DATA.filter(function(r){return isReview(r)}),'fecha');
+      var mIdx=allMonths.indexOf(monthSel);
+      var prevMonth=mIdx>0?allMonths[mIdx-1]:null;
+      increments=props.map(function(p){
+        var curRow=rev.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});
+        var curVal=curRow.length?(curRow[0][REVIEW_FIELD]||0):0;
+        if(!prevMonth)return null;
+        var prevRow=ALL_DATA.filter(function(r){return isReview(r)&&r['propiedad']===p&&r['fecha']===prevMonth});
+        var prevVal=prevRow.length?(prevRow[0][REVIEW_FIELD]||0):0;
+        var diff=curVal-prevVal;
+        return diff!==0?diff:null;
+      });
+    }
   }else{
     var months=uniqueSorted(rev,'fecha');
     labels=months.map(fmtMonth);
@@ -488,17 +571,45 @@ function renderReviews(isSpecificMonth){
       var row=rev.filter(function(r){return r['fecha']===m});
       return row.length?(row[0][REVIEW_FIELD]||0):0;
     });
+    // Increments: diff from previous month for each bar
+    increments=vals.map(function(v,idx){
+      if(idx===0)return null;
+      var diff=v-vals[idx-1];
+      return diff!==0?diff:null;
+    });
   }
 
   var total=currentView==='all'?vals.reduce(function(a,b){return a+b},0):reviewCount(rev);
-  var periodo=isSpecificMonth?fmtMonth(document.getElementById('month-filter').value):'cumulative total';
+  var periodo=isSpecificMonth?fmtMonth(monthSel):'cumulative total';
   document.getElementById('chart-gr-sub').textContent=(total>0?fmt(total)+' reviews · ':'')+periodo;
+
+  // Build datalabels plugin config for increments
+  var chartPlugins=[{id:'reviewIncrements',afterDatasetsDraw:function(chart){
+    if(!increments)return;
+    var ctx=chart.ctx;
+    var meta=chart.getDatasetMeta(0);
+    ctx.save();
+    ctx.font='500 10px "DM Mono", monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='bottom';
+    for(var idx=0;idx<meta.data.length;idx++){
+      var inc=increments[idx];
+      if(inc===null||inc===undefined)continue;
+      var bar=meta.data[idx];
+      var x=bar.x;
+      var y=bar.y-4;
+      ctx.fillStyle=inc>0?'#059669':'#DC2626';
+      ctx.fillText((inc>0?'+':'')+inc,x,y);
+    }
+    ctx.restore();
+  }}];
 
   charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',
     data:{labels:labels,datasets:[{data:vals,backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
       tooltip:{callbacks:{label:function(c){return fmt(c.parsed.y)+' reviews'}}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}},
+    plugins:chartPlugins
   });
 }
 
