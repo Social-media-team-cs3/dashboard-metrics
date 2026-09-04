@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS3 Social Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#F7F7F8;--surface:#FFFFFF;--surface2:#F3F3F6;--border:#E5E5EA;--border2:#D1D1D8;--text:#111118;--text2:#52525E;--text3:#9898A8;--accent:#4F46E5;--accent-lt:#EEF2FF;--green:#059669;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--ig:#C2185B;--tt:#00796B;--fb:#1565C0;--gr:#E65100;--radius:10px;--radius-sm:6px;--mono:'DM Mono',monospace}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
+:root{--bg:#F7F7F8;--surface:#FFFFFF;--surface2:#F3F3F6;--border:#E5E5EA;--border2:#D1D1D8;--text:#111118;--text2:#52525E;--text3:#9898A8;--accent:#4F46E5;--accent-lt:#EEF2FF;--green:#059669;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--ig:#C2185B;--tt:#00796B;--fb:#1565C0;--gr:#E65100;--radius:10px;--radius-sm:6px;--font:'Inter',sans-serif}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh}
 .shell{display:flex;min-height:100vh}
 .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
 .sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
-.sidebar-logo-name{font-size:13px;font-weight:600;color:var(--text)}
-.sidebar-logo-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.sidebar-logo-name{font-size:13px;font-weight:600}
+.sidebar-logo-sub{font-size:11px;color:var(--text3);margin-top:2px}
 .sidebar-section{padding:6px 12px 2px;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase}
 .nav-item{display:flex;align-items:center;gap:7px;padding:8px 14px 8px 18px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:background .1s,color .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:var(--accent-lt);color:var(--accent);border-left-color:var(--accent);font-weight:500}
 .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .plat-tags{display:flex;gap:3px;margin-left:auto;flex-shrink:0}
-.plat-tag{font-size:9px;font-family:var(--mono);padding:1px 4px;border-radius:3px;line-height:1.5;border:1px solid transparent}
+.plat-tag{font-size:9px;font-family:var(--font);padding:1px 4px;border-radius:3px;line-height:1.5;border:1px solid transparent;font-weight:500}
 .on-ig{background:#FCE4EC;color:var(--ig);border-color:#F8BBD0}
 .on-tt{background:#E0F2F1;color:var(--tt);border-color:#B2DFDB}
 .on-fb{background:#E3F2FD;color:var(--fb);border-color:#BBDEFB}
@@ -30,45 +30,56 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .main{flex:1;min-width:0;padding:32px 28px}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
 .page-title{font-size:22px;font-weight:600;letter-spacing:-.02em}
-.page-sub{font-size:12px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+.page-sub{font-size:12px;color:var(--text3);margin-top:3px}
 .header-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-select{font-family:'Inter',sans-serif;font-size:12px;padding:7px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;outline:none}
+select{font-family:var(--font);font-size:12px;padding:7px 12px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;outline:none}
 select:focus{border-color:var(--accent)}
-.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text3);padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface)}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface)}
 .status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
 .status-pill.loading::before{background:var(--amber);animation:blink 1s infinite}
 .status-pill.error::before{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;animation:fadeIn .3s ease both}
-.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:6px}
+.kpi-label{font-size:10px;color:var(--text3);margin-bottom:6px;font-weight:500;letter-spacing:.02em}
 .kpi-val{font-size:22px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:5px}
-.kpi-delta{font-size:10px;font-family:var(--mono);display:flex;align-items:center;gap:3px}
+.kpi-delta{font-size:10px;display:flex;align-items:center;gap:3px}
 .up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text3)}
 
-/* Section 2: charts row */
-.section2-row1{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-/* Section 2 row 2: donuts side by side */
-.section2-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-/* Section 2 row 3: google reviews full width */
+/* Section 2 rows */
+.section2-row1{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.section2-row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .section2-row3{margin-bottom:14px}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;animation:fadeIn .35s ease both}
 .card-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
-.card-title{font-size:13px;font-weight:500}.card-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
-.card-badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE}
+.card-title{font-size:13px;font-weight:500}.card-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.card-badge{font-size:10px;font-weight:500;padding:3px 7px;border-radius:4px;background:var(--accent-lt);color:var(--accent);border:1px solid #C7D2FE}
 .card-badge.badge-gr{background:#FFF3E0;color:var(--gr);border-color:#FFCC80}
 
-/* Google Reviews wide card layout */
-.gr-wide-card{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start}
+/* Google Reviews wide card */
+.gr-wide-card{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
 .gr-chart-area{height:220px}
-.gr-legend-area{padding:4px 0;font-family:var(--mono)}
-.gr-legend-area .gr-legend-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px;letter-spacing:-.01em}
-.gr-legend-area .gr-legend-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:12px}
-.gr-legend-area .gr-legend-row:last-child{border-bottom:none}
-.gr-legend-area .gr-legend-label{color:var(--text);font-size:13px}
-.gr-legend-area .gr-legend-val{font-weight:600;color:var(--text);font-size:15px;text-align:right}
-.gr-legend-area .gr-legend-val .gr-new{color:var(--green);font-size:12px;font-weight:500;margin-left:6px}
+.gr-legend-area{padding:4px 0}
+.gr-legend-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:-.01em}
+.gr-legend-header{display:grid;grid-template-columns:1fr 60px 50px;gap:8px;padding:0 0 8px;border-bottom:2px solid var(--border);margin-bottom:4px}
+.gr-legend-header span{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.gr-legend-header span:not(:first-child){text-align:right}
+.gr-legend-row{display:grid;grid-template-columns:1fr 60px 50px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.gr-legend-row:last-child{border-bottom:none}
+.gr-legend-label{color:var(--text);font-size:13px;font-weight:400}
+.gr-legend-val{font-weight:600;color:var(--text);font-size:14px;text-align:right}
+.gr-legend-new{font-weight:500;color:var(--green);font-size:12px;text-align:right}
+/* 1.1 summary variant */
+.gr-legend-row-simple{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.gr-legend-row-simple:last-child{border-bottom:none}
+.gr-legend-row-simple .gr-legend-label{font-size:13px}
+.gr-legend-row-simple .gr-legend-val{font-size:14px;font-weight:600}
+/* 2.x legend */
+.gr-legend-row-prop{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.gr-legend-row-prop:last-child{border-bottom:none}
+.gr-legend-row-prop .gr-legend-label{font-size:13px}
+.gr-legend-row-prop .gr-legend-val{font-size:16px;font-weight:600}
 
 .plat-section{border-radius:var(--radius);padding:16px;margin-bottom:14px;border:1px solid var(--border)}
 .plat-section-hd{display:flex;align-items:center;gap:8px;margin-bottom:14px}
@@ -81,49 +92,52 @@ select:focus{border-color:var(--accent)}
 .plat-fb{background:rgba(21,101,192,.04);border-color:rgba(21,101,192,.12)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{text-align:left;padding:9px 12px;font-size:10px;font-family:var(--mono);letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
-tbody td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-family:var(--mono);font-size:12px;white-space:nowrap}
+thead th{text-align:left;padding:9px 12px;font-size:10px;letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-size:12px;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:var(--surface2)}
-.prop-cell{color:var(--text);font-weight:500;font-family:'Inter',sans-serif;font-size:12px}
-.plat-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
+.prop-cell{color:var(--text);font-weight:500;font-size:12px}
+.plat-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:500}
 .pill-ig{background:#FCE4EC;color:var(--ig)}.pill-tt{background:#E0F2F1;color:var(--tt)}.pill-fb{background:#E3F2FD;color:var(--fb)}.pill-gr{background:#FFF3E0;color:var(--gr)}
-.eng-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono)}
+.eng-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:500}
 .eng-good{background:var(--green-lt);color:var(--green)}.eng-mid{background:var(--amber-lt);color:var(--amber)}.eng-low{background:var(--red-lt);color:var(--red)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
-.leg{display:flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text3)}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
 .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-family:var(--mono);font-size:12px;line-height:2}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-size:12px;line-height:2}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .mobile-prop{display:none}
 
 /* Tab bar */
 .tab-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--border)}
-.tab-btn{padding:10px 20px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s}
+.tab-btn{padding:10px 20px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border:none;background:none;font-family:var(--font);border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s}
 .tab-btn:hover{color:var(--text)}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* Weekly Update Tab — phone-frame cards like ref image */
-.weekly-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
-.weekly-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;animation:fadeIn .35s ease both;padding:16px}
-.weekly-phone{width:100%;max-width:180px;margin:0 auto 14px;background:var(--surface2);border-radius:20px;overflow:hidden;aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);position:relative}
-.weekly-phone .placeholder-text{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text3);font-family:var(--mono);font-size:10px}
-.weekly-card-body{text-align:center}
-.weekly-card-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
-.weekly-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
-.weekly-stat-val{font-size:14px;font-weight:600;color:var(--text);font-family:var(--mono)}
-.weekly-stat-label{font-size:8px;color:var(--text3);text-transform:uppercase;font-family:var(--mono);letter-spacing:.04em}
-.weekly-card-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:11px;color:var(--text3);font-family:var(--mono)}
-.weekly-meta-tag{padding:2px 7px;border-radius:3px;font-size:10px}
-.weekly-card-engagement{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-.weekly-eng-item{display:flex;flex-direction:column;align-items:center;gap:1px}
-.weekly-eng-icon{font-size:12px}
-.weekly-eng-val{font-size:11px;font-weight:500;color:var(--text);font-family:var(--mono)}
+/* Weekly — ref image layout: phone left, stats right, engagement bar bottom */
+.weekly-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.weekly-card{background:var(--surface2);border-radius:16px;overflow:hidden;animation:fadeIn .35s ease both;padding:20px 16px 0}
+.weekly-card-inner{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.weekly-phone{width:130px;background:#e8e8ec;border-radius:18px;overflow:hidden;aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;border:3px solid #222;position:relative;flex-shrink:0}
+.weekly-phone::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:40px;height:5px;background:#222;border-radius:4px;z-index:2}
+.weekly-phone .placeholder-text{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--text3);font-size:10px}
+.weekly-phone iframe,.weekly-phone img{width:100%;height:100%;object-fit:cover;border:none}
+.weekly-stats-right{padding:8px 0}
+.weekly-big-stat{margin-bottom:14px}
+.weekly-big-val{font-size:24px;font-weight:700;color:var(--text);line-height:1}
+.weekly-big-label{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+.weekly-format{margin-top:16px}
+.weekly-format-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.weekly-format-val{font-size:14px;font-weight:600;color:var(--text);margin-top:2px}
+.weekly-engagement{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--surface);border-radius:12px;margin:16px -16px 0;padding:10px 0}
+.weekly-eng-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0}
+.weekly-eng-icon{font-size:14px;color:var(--text3)}
+.weekly-eng-icon svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:1.5}
+.weekly-eng-val{font-size:12px;font-weight:500;color:var(--text2)}
 
-/* Responsive — all stacks to single column on mobile */
-@media(max-width:1100px){.section2-row1{grid-template-columns:1fr 1fr}.section2-row2{grid-template-columns:1fr}.plat-section-grid{grid-template-columns:1fr 1fr}.weekly-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:1000px){.sidebar{display:none}.mobile-prop{display:block}.section2-row1{grid-template-columns:1fr}.section2-row2{grid-template-columns:1fr}.plat-section-grid{grid-template-columns:1fr}.gr-wide-card{grid-template-columns:1fr}.gr-chart-area{height:180px}}
-@media(max-width:640px){.main{padding:16px}.kpi-row{grid-template-columns:1fr 1fr}.section2-row1{grid-template-columns:1fr}.section2-row2{grid-template-columns:1fr}.weekly-grid{grid-template-columns:1fr}}
+@media(max-width:1200px){.section2-row1{grid-template-columns:1fr 1fr}.section2-row2{grid-template-columns:1fr 1fr}.weekly-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:1000px){.sidebar{display:none}.mobile-prop{display:block}.section2-row1{grid-template-columns:1fr}.section2-row2{grid-template-columns:1fr}.plat-section-grid{grid-template-columns:1fr}.gr-wide-card{grid-template-columns:1fr}.gr-chart-area{height:180px}.weekly-grid{grid-template-columns:1fr}.weekly-card-inner{grid-template-columns:100px 1fr}.weekly-phone{width:100px}}
+@media(max-width:640px){.main{padding:16px}.kpi-row{grid-template-columns:1fr 1fr}.section2-row1{grid-template-columns:1fr}.weekly-card-inner{grid-template-columns:1fr}.weekly-phone{width:100%;max-width:160px;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -152,35 +166,32 @@ tbody tr:hover td{background:var(--surface2)}
         <div class="status-pill loading" id="status">Loading...</div>
       </div>
     </div>
-
-    <!-- Tab Bar -->
-    <div class="tab-bar" id="tab-bar">
+    <div class="tab-bar">
       <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
       <button class="tab-btn" data-tab="weekly" onclick="switchTab('weekly')">Weekly Update</button>
     </div>
 
-    <!-- Dashboard Tab Content -->
     <div id="tab-dashboard">
       <div class="kpi-row" id="kpi-row"><div class="empty-state" style="grid-column:1/-1">Loading data from Google Sheets...</div></div>
 
-      <!-- Section 2 Row 1: Followers, Views, Engagement Rate, Platform Split by Views -->
+      <!-- Row 2.1: Followers, Views, Platform Split (views) -->
       <div class="section2-row1" id="section2-row1">
         <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-seg-title">Followers</div><div class="card-sub" id="chart-seg-sub">cumulative total</div></div><span class="card-badge">FOLLOWERS</span></div><div style="height:200px"><canvas id="c-followers"></canvas></div></div>
         <div class="card"><div class="card-hd"><div><div class="card-title" id="chart-views-title">Views</div><div class="card-sub" id="chart-views-sub">cumulative total</div></div><span class="card-badge">REACH</span></div><div style="height:200px"><canvas id="c-views"></canvas></div></div>
-        <div class="card"><div class="card-hd"><div><div class="card-title">Engagement Rate</div><div class="card-sub">likes / views × 100</div></div></div><div style="height:200px"><canvas id="c-engagement"></canvas></div></div>
         <div class="card"><div class="card-hd"><div><div class="card-title">Platform Split</div><div class="card-sub">by total views</div></div></div><div style="height:140px"><canvas id="c-donut"></canvas></div>
           <div class="legend" style="justify-content:center"><div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div><div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div><div class="leg"><div class="leg-dot" style="background:#1565C0"></div>Facebook</div></div>
         </div>
       </div>
 
-      <!-- Section 2 Row 2: Platform Split by Engagement + (empty for balance) -->
-      <div class="section2-row2" id="section2-row2">
+      <!-- Row 2.2: Engagement Rate, Platform Split (engagement) -->
+      <div class="section2-row2" id="section2-row2" style="grid-template-columns:1fr 1fr">
+        <div class="card"><div class="card-hd"><div><div class="card-title">Engagement Rate</div><div class="card-sub">likes / views × 100</div></div></div><div style="height:200px"><canvas id="c-engagement"></canvas></div></div>
         <div class="card"><div class="card-hd"><div><div class="card-title">Platform Split</div><div class="card-sub">by engagement rate</div></div></div><div style="height:160px"><canvas id="c-donut-eng"></canvas></div>
           <div class="legend" style="justify-content:center"><div class="leg"><div class="leg-dot" style="background:#C2185B"></div>Instagram</div><div class="leg"><div class="leg-dot" style="background:#00796B"></div>TikTok</div><div class="leg"><div class="leg-dot" style="background:#1565C0"></div>Facebook</div></div>
         </div>
       </div>
 
-      <!-- Section 2 Row 3: Google Reviews full width -->
+      <!-- Row 3: Google Reviews full width -->
       <div class="section2-row3">
         <div class="card" id="reviews-card"><div class="card-hd"><div><div class="card-title">Google Reviews</div><div class="card-sub" id="chart-gr-sub">cumulative total</div></div><span class="card-badge badge-gr">REVIEWS</span></div>
           <div class="gr-wide-card">
@@ -196,436 +207,113 @@ tbody tr:hover td{background:var(--surface2)}
       </div>
     </div>
 
-    <!-- Weekly Update Tab Content -->
+    <!-- Weekly Update Tab -->
     <div id="tab-weekly" style="display:none">
       <div style="margin-bottom:20px">
         <div style="font-size:18px;font-weight:600;letter-spacing:-.02em">Best Performing Content</div>
-        <div style="font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:4px">Top 3 this week</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px">Top 3 this week</div>
       </div>
       <div class="weekly-grid" id="weekly-grid">
-        <!-- Placeholder card 1 -->
         <div class="weekly-card">
-          <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:28px">📷</span><span>Content preview</span><span style="font-size:9px">Link from Sheet</span></div></div>
-          <div class="weekly-card-body">
-            <div class="weekly-card-stats">
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Impressions</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Reach</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Saves</div></div>
-            </div>
-            <div class="weekly-card-meta">
-              <span class="weekly-meta-tag pill-ig">Instagram</span>
-              <span>Infinite</span>
-              <span>· Carousel</span>
-            </div>
-            <div class="weekly-card-engagement">
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">❤️</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">💬</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔁</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔖</div><div class="weekly-eng-val">—</div></div>
+          <div class="weekly-card-inner">
+            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
+            <div class="weekly-stats-right">
+              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
+              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Carousel</div></div>
+              <div style="margin-top:6px"><span class="plat-pill pill-ig" style="font-size:10px">Instagram</span> <span style="font-size:11px;color:var(--text2)">Infinite</span></div>
             </div>
           </div>
-        </div>
-        <!-- Placeholder card 2 -->
-        <div class="weekly-card">
-          <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:28px">📷</span><span>Content preview</span><span style="font-size:9px">Link from Sheet</span></div></div>
-          <div class="weekly-card-body">
-            <div class="weekly-card-stats">
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Impressions</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Reach</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Saves</div></div>
-            </div>
-            <div class="weekly-card-meta">
-              <span class="weekly-meta-tag pill-tt">TikTok</span>
-              <span>McKenzie</span>
-              <span>· Reel</span>
-            </div>
-            <div class="weekly-card-engagement">
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">❤️</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">💬</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔁</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔖</div><div class="weekly-eng-val">—</div></div>
-            </div>
+          <div class="weekly-engagement">
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
           </div>
         </div>
-        <!-- Placeholder card 3 -->
         <div class="weekly-card">
-          <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:28px">📷</span><span>Content preview</span><span style="font-size:9px">Link from Sheet</span></div></div>
-          <div class="weekly-card-body">
-            <div class="weekly-card-stats">
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Impressions</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Reach</div></div>
-              <div class="weekly-stat"><div class="weekly-stat-val">—</div><div class="weekly-stat-label">Saves</div></div>
+          <div class="weekly-card-inner">
+            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
+            <div class="weekly-stats-right">
+              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
+              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Reel</div></div>
+              <div style="margin-top:6px"><span class="plat-pill pill-tt" style="font-size:10px">TikTok</span> <span style="font-size:11px;color:var(--text2)">McKenzie</span></div>
             </div>
-            <div class="weekly-card-meta">
-              <span class="weekly-meta-tag pill-fb">Facebook</span>
-              <span>The Gateway</span>
-              <span>· Image</span>
+          </div>
+          <div class="weekly-engagement">
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
+          </div>
+        </div>
+        <div class="weekly-card">
+          <div class="weekly-card-inner">
+            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
+            <div class="weekly-stats-right">
+              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
+              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Image</div></div>
+              <div style="margin-top:6px"><span class="plat-pill pill-fb" style="font-size:10px">Facebook</span> <span style="font-size:11px;color:var(--text2)">The Gateway</span></div>
             </div>
-            <div class="weekly-card-engagement">
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">❤️</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">💬</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔁</div><div class="weekly-eng-val">—</div></div>
-              <div class="weekly-eng-item"><div class="weekly-eng-icon">🔖</div><div class="weekly-eng-val">—</div></div>
-            </div>
+          </div>
+          <div class="weekly-engagement">
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
+            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
           </div>
         </div>
       </div>
-      <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-family:var(--mono);font-size:11px;color:var(--text3)">
-        ⚙️ Weekly data will pull from a dedicated Google Sheets tab. Configure the sheet with columns: content_link, platform, property, content_type, impressions, reach, likes, comments, shares, saves.
+      <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text3)">
+        ⚙️ Weekly data pulls from a dedicated Google Sheets tab. Columns: content_link, platform, property, content_type, impressions, reach, likes, comments, shares, saves. For previews, use a direct image URL or Google Drive file ID.
       </div>
     </div>
-
   </main>
 </div>
 <script>
 var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-waQPHqtgLCkjf0v9Fz8WXPJEHFpfK15el2oVLyJIcsDbqE05lhGfHOg1ImyXng/pub?gid=894203016&single=true&output=csv';
-
 var SOCIAL=['Instagram','TikTok','Facebook'];
 var REVIEWS_PLAT='Google Reviews';
 var REVIEW_FIELD='seguidores';
 var REVIEW_MODE='latest';
-
 var PLAT_COLORS={'Instagram':'#C2185B','TikTok':'#00796B','Facebook':'#1565C0','Google Reviews':'#E65100'};
 var PLAT_PILL={'Instagram':'pill-ig','TikTok':'pill-tt','Facebook':'pill-fb','Google Reviews':'pill-gr'};
 var PLAT_ABBR={'Instagram':'IG','TikTok':'TT','Facebook':'FB','Google Reviews':'GR'};
 var PLAT_ON={'Instagram':'on-ig','TikTok':'on-tt','Facebook':'on-fb','Google Reviews':'on-gr'};
 var TAG_PLATS=['Instagram','TikTok','Facebook','Google Reviews'];
 var PLAT_CSS_CLASS={'Instagram':'plat-ig','TikTok':'plat-tt','Facebook':'plat-fb'};
-
-function hasData(prop,plat){
-  var f=plat===REVIEWS_PLAT?[REVIEW_FIELD]:['seguidores','views','likes','posts'];
-  return ALL_DATA.some(function(r){
-    if(r['propiedad']!==prop||r['plataforma']!==plat)return false;
-    for(var i=0;i<f.length;i++){if(r[f[i]]>0)return true;}
-    return false;
-  });
-}
-
+function hasData(prop,plat){var f=plat===REVIEWS_PLAT?[REVIEW_FIELD]:['seguidores','views','likes','posts'];return ALL_DATA.some(function(r){if(r['propiedad']!==prop||r['plataforma']!==plat)return false;for(var i=0;i<f.length;i++){if(r[f[i]]>0)return true;}return false;});}
 var PROP_COLORS={'McKenzie':'#4F46E5','The Reserve at Cool Springs':'#9D174D','The Gateway Village':'#166534','Legends at Armour Avenue':'#92400E','Legacy':'#1D4ED8','Winding Springs':'#991B1B','Infinite':'#14532D','CS3 Investments':'#3730A3'};
 var FB_COLORS=['#4F46E5','#9D174D','#166534','#92400E','#1D4ED8','#991B1B','#14532D','#3730A3'];
-var ALL_DATA=[],currentView='all',charts={},currentTab='dashboard';
-
-function switchTab(tab){
-  currentTab=tab;
-  document.querySelectorAll('.tab-btn').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-tab')===tab)});
-  document.getElementById('tab-dashboard').style.display=tab==='dashboard'?'':'none';
-  document.getElementById('tab-weekly').style.display=tab==='weekly'?'':'none';
-}
-
-function loadData(){
-  setStatus('loading','Loading...');
-  var url=CSV_URL+'&t='+Date.now();
-  fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){
-    ALL_DATA=parseCSV(text);
-    for(var i=0;i<ALL_DATA.length;i++){
-      if(ALL_DATA[i]['propiedad']==='Ascend') ALL_DATA[i]['propiedad']='Infinite';
-    }
-    if(!ALL_DATA.length)throw new Error('No data in Sheets');
-    buildNav();buildMonthFilter();render();
-    var now=new Date();var hh=now.getHours().toString().padStart(2,'0');var mm=now.getMinutes().toString().padStart(2,'0');
-    setStatus('ok',ALL_DATA.length+' records · '+hh+':'+mm);
-    document.getElementById('page-sub').textContent=ALL_DATA.length+' records · updated '+hh+':'+mm;
-  }).catch(function(e){
-    setStatus('error','Error');document.getElementById('page-sub').textContent=e.message;
-    document.getElementById('kpi-row').innerHTML='<div class="empty-state" style="grid-column:1/-1">Could not load data.<br><small>'+e.message+'</small></div>';
-  });
-}
-
-function parseCSV(text){
-  var lines=text.trim().split('\n');if(lines.length<2)return[];
-  var headerIdx=0;
-  for(var i=0;i<Math.min(5,lines.length);i++){if(lines[i].toLowerCase().indexOf('fecha')!==-1){headerIdx=i;break;}}
-  var headers=splitLine(lines[headerIdx]);
-  for(var h=0;h<headers.length;h++)headers[h]=headers[h].toLowerCase().trim();
-  var rows=[],numFields=['seguidores','views','likes','comentarios','guardados','compartidos','clicks','posts','profile_visits'];
-  for(var i=headerIdx+1;i<lines.length;i++){
-    var vals=splitLine(lines[i]);var obj={};
-    for(var j=0;j<headers.length;j++)obj[headers[j]]=(vals[j]||'').trim();
-    if(!obj['propiedad']||!obj['fecha'])continue;
-    for(var n=0;n<numFields.length;n++){var raw=(obj[numFields[n]]||'').replace(/[.\s,]/g,'');obj[numFields[n]]=parseInt(raw,10)||0;}
-    rows.push(obj);
-  }
-  return rows;
-}
-
+var ALL_DATA=[],currentView='all',charts={};
+function switchTab(tab){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-tab')===tab)});document.getElementById('tab-dashboard').style.display=tab==='dashboard'?'':'none';document.getElementById('tab-weekly').style.display=tab==='weekly'?'':'none';}
+function loadData(){setStatus('loading','Loading...');fetch(CSV_URL+'&t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){ALL_DATA=parseCSV(text);for(var i=0;i<ALL_DATA.length;i++){if(ALL_DATA[i]['propiedad']==='Ascend')ALL_DATA[i]['propiedad']='Infinite';}if(!ALL_DATA.length)throw new Error('No data');buildNav();buildMonthFilter();render();var now=new Date();var hh=now.getHours().toString().padStart(2,'0');var mm=now.getMinutes().toString().padStart(2,'0');setStatus('ok',ALL_DATA.length+' records · '+hh+':'+mm);document.getElementById('page-sub').textContent=ALL_DATA.length+' records · updated '+hh+':'+mm;}).catch(function(e){setStatus('error','Error');document.getElementById('page-sub').textContent=e.message;document.getElementById('kpi-row').innerHTML='<div class="empty-state" style="grid-column:1/-1">Could not load data.<br><small>'+e.message+'</small></div>';});}
+function parseCSV(text){var lines=text.trim().split('\n');if(lines.length<2)return[];var headerIdx=0;for(var i=0;i<Math.min(5,lines.length);i++){if(lines[i].toLowerCase().indexOf('fecha')!==-1){headerIdx=i;break;}}var headers=splitLine(lines[headerIdx]);for(var h=0;h<headers.length;h++)headers[h]=headers[h].toLowerCase().trim();var rows=[],numFields=['seguidores','views','likes','comentarios','guardados','compartidos','clicks','posts','profile_visits'];for(var i=headerIdx+1;i<lines.length;i++){var vals=splitLine(lines[i]);var obj={};for(var j=0;j<headers.length;j++)obj[headers[j]]=(vals[j]||'').trim();if(!obj['propiedad']||!obj['fecha'])continue;for(var n=0;n<numFields.length;n++){var raw=(obj[numFields[n]]||'').replace(/[.\s,]/g,'');obj[numFields[n]]=parseInt(raw,10)||0;}rows.push(obj);}return rows;}
 function splitLine(line){var out=[],cur='',inQ=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){out.push(cur);cur='';continue;}cur+=c;}out.push(cur);return out;}
-
 function isSocial(r){return SOCIAL.indexOf(r['plataforma'])!==-1;}
 function isReview(r){return r['plataforma']===REVIEWS_PLAT;}
+function getFiltered(){var month=document.getElementById('month-filter').value;return ALL_DATA.filter(function(r){return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);});}
+function getFilteredByPlatform(plat){var month=document.getElementById('month-filter').value;return ALL_DATA.filter(function(r){return r['plataforma']===plat&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);});}
+function getForMonth(month){return ALL_DATA.filter(function(r){return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&r['fecha']===month;});}
+function getReviews(){var month=document.getElementById('month-filter').value;return ALL_DATA.filter(function(r){return isReview(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);});}
+function buildMonthFilter(){var months=uniqueSorted(ALL_DATA,'fecha');var sel=document.getElementById('month-filter');while(sel.options.length>1)sel.remove(1);for(var i=0;i<months.length;i++){if(!months[i])continue;var o=document.createElement('option');o.value=months[i];o.textContent=fmtMonth(months[i]);sel.appendChild(o);}}
+function buildNav(){var props=uniqueSorted(ALL_DATA,'propiedad');var container=document.getElementById('nav-props');container.innerHTML='';for(var i=0;i<props.length;i++){var p=props[i];if(!p)continue;var tag='<div class="plat-tags">';for(var s2=0;s2<TAG_PLATS.length;s2++){var pl=TAG_PLATS[s2];var on=hasData(p,pl);tag+='<span class="plat-tag '+(on?PLAT_ON[pl]:'tag-off')+'" title="'+pl+(on?'':' — no data')+'">'+PLAT_ABBR[pl]+'</span>';}tag+='</div>';var color=PROP_COLORS[p]||FB_COLORS[i%FB_COLORS.length];var el=document.createElement('div');el.className='nav-item';el.setAttribute('data-prop',p);el.innerHTML='<div class="nav-dot" style="background:'+color+'"></div><span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:12px">'+p+'</span>'+tag;el.onclick=(function(prop){return function(){setView(prop)};})(p);container.appendChild(el);}var mobSel=document.getElementById('prop-filter-mobile');if(mobSel){while(mobSel.options.length>1)mobSel.remove(1);for(var k=0;k<props.length;k++){if(!props[k])continue;var mo=document.createElement('option');mo.value=props[k];mo.textContent=props[k];mobSel.appendChild(mo);}}}
+function setView(prop){currentView=prop;var items=document.querySelectorAll('.nav-item');for(var i=0;i<items.length;i++){var el=items[i];if(prop==='all')el.classList.toggle('active',el.id==='nav-all');else el.classList.toggle('active',el.getAttribute('data-prop')===prop);}document.getElementById('page-title').textContent=prop==='all'?'All Properties':prop;var mobSel=document.getElementById('prop-filter-mobile');if(mobSel)mobSel.value=prop==='all'?'all':prop;render();}
+function render(){var data=getFiltered();var monthSel=document.getElementById('month-filter').value;var isSpecificMonth=monthSel!=='ALL';renderKPIs(data);renderFollowersTotal(data,isSpecificMonth,monthSel);renderViewsTotal(data,isSpecificMonth,monthSel);renderEngagement(data);renderDonut(data);renderDonutEngagement(data);renderReviews(isSpecificMonth);renderPlatformRows(isSpecificMonth,monthSel);if(isSpecificMonth){renderTable(data);document.getElementById('tbl-sub').textContent=data.length+' records';}else{renderBestMonthTable();}}
 
-function getFiltered(){
-  var month=document.getElementById('month-filter').value;
-  return ALL_DATA.filter(function(r){
-    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
-  });
-}
-function getFilteredByPlatform(plat){
-  var month=document.getElementById('month-filter').value;
-  return ALL_DATA.filter(function(r){
-    return r['plataforma']===plat&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
-  });
-}
-function getForMonth(month){
-  return ALL_DATA.filter(function(r){
-    return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&r['fecha']===month;
-  });
-}
-function getReviews(){
-  var month=document.getElementById('month-filter').value;
-  return ALL_DATA.filter(function(r){
-    return isReview(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);
-  });
-}
+// KPIs
+function getFollowersKPI(data,monthSel){var allMonths=uniqueSorted(ALL_DATA,'fecha');var dataMonths=uniqueSorted(data,'fecha');var targetMonth,prevMonth;if(monthSel!=='ALL'){targetMonth=monthSel;var mIdx=allMonths.indexOf(targetMonth);prevMonth=mIdx>0?allMonths[mIdx-1]:null;}else{targetMonth=null;for(var mi=dataMonths.length-1;mi>=0;mi--){var cr=getForMonth(dataMonths[mi]);if(sumField(cr,'seguidores')>0){targetMonth=dataMonths[mi];break;}}if(!targetMonth)targetMonth=dataMonths[dataMonths.length-1];var tIdx=dataMonths.indexOf(targetMonth);prevMonth=null;for(var mi2=tIdx-1;mi2>=0;mi2--){var cr2=getForMonth(dataMonths[mi2]);if(sumField(cr2,'seguidores')>0){prevMonth=dataMonths[mi2];break;}}}var targetRows=targetMonth?getForMonth(targetMonth):[];var prevRows=prevMonth?getForMonth(prevMonth):[];var displayVal=sumField(targetRows,'seguidores');var prevVal=sumField(prevRows,'seguidores');var deltaPercent=prevVal>0?((displayVal-prevVal)/prevVal*100):null;var compLabel=monthSel==='ALL'?fmtMonth(targetMonth):(prevMonth?'vs '+fmtMonth(prevMonth):'');return{val:displayVal,delta:deltaPercent,label:compLabel};}
+function getReviewsKPI(monthSel){var allRevData=ALL_DATA.filter(function(r){return isReview(r)&&(currentView==='all'||r['propiedad']===currentView);});var props=uniqueSorted(allRevData,'propiedad');var allMonths=uniqueSorted(allRevData,'fecha');if(monthSel!=='ALL'){var targetVal=0,prevVal=0,mIdx=allMonths.indexOf(monthSel),prevMonth=mIdx>0?allMonths[mIdx-1]:null;for(var pi=0;pi<props.length;pi++){var p=props[pi];var tRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});targetVal+=tRow.length?(tRow[0][REVIEW_FIELD]||0):0;if(prevMonth){var pRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===prevMonth});prevVal+=pRow.length?(pRow[0][REVIEW_FIELD]||0):0;}}var delta=prevVal>0?((targetVal-prevVal)/prevVal*100):null;return{val:targetVal,delta:delta,label:prevMonth?'vs '+fmtMonth(prevMonth):''};}else{var totalVal=0,latestMonth=null,prevMonth2=null;for(var mi=allMonths.length-1;mi>=0;mi--){var hasAny=allRevData.some(function(r){return r['fecha']===allMonths[mi]&&r[REVIEW_FIELD]>0});if(hasAny){if(!latestMonth)latestMonth=allMonths[mi];else if(!prevMonth2){prevMonth2=allMonths[mi];break;}}}var latestVal=0,prevVal2=0;for(var pi=0;pi<props.length;pi++){var p=props[pi];var propRows=allRevData.filter(function(r){return r['propiedad']===p});var maxVal=0;for(var ri=0;ri<propRows.length;ri++){if(propRows[ri][REVIEW_FIELD]>maxVal)maxVal=propRows[ri][REVIEW_FIELD];}totalVal+=maxVal;if(latestMonth){var lRow=propRows.filter(function(r){return r['fecha']===latestMonth});latestVal+=lRow.length?(lRow[0][REVIEW_FIELD]||0):0;}if(prevMonth2){var pRow2=propRows.filter(function(r){return r['fecha']===prevMonth2});prevVal2+=pRow2.length?(pRow2[0][REVIEW_FIELD]||0):0;}}var delta2=prevVal2>0?((latestVal-prevVal2)/prevVal2*100):null;return{val:totalVal,delta:delta2,label:latestMonth?fmtMonth(latestMonth):''};}}
+function renderKPIs(data){var monthSel=document.getElementById('month-filter').value;var allMonths=uniqueSorted(ALL_DATA,'fecha');var dataMonths=uniqueSorted(data,'fecha');var targetMonth,prevMonth;if(monthSel!=='ALL'){targetMonth=monthSel;var mIdx=allMonths.indexOf(targetMonth);prevMonth=mIdx>0?allMonths[mIdx-1]:null;}else{targetMonth=dataMonths[dataMonths.length-1];prevMonth=dataMonths.length>1?dataMonths[dataMonths.length-2]:null;}var targetRows=targetMonth?getForMonth(targetMonth):[];var prevRows=prevMonth?getForMonth(prevMonth):[];var fol=getFollowersKPI(data,monthSel);var grKpi=getReviewsKPI(monthSel);var metrics=[{label:'Views',key:'views',special:false},{label:'Followers',key:'seguidores',special:'followers'},{label:'Google Reviews',key:null,special:'reviews'},{label:'Profile Visits',key:'profile_visits',special:false},{label:'Likes',key:'likes',special:false},{label:'Clicks',key:'clicks',special:false},{label:'Posts',key:'posts',special:false},{label:'Comments',key:'comentarios',special:false}];var html='';for(var i=0;i<metrics.length;i++){var m=metrics[i];var displayVal,deltaPercent,compLabel;if(m.special==='followers'){displayVal=fol.val;deltaPercent=fol.delta;compLabel=fol.label;}else if(m.special==='reviews'){displayVal=grKpi.val;deltaPercent=grKpi.delta;compLabel=grKpi.label;}else if(monthSel==='ALL'){displayVal=sumField(data,m.key);var lastVal=sumField(targetRows,m.key);var pv=sumField(prevRows,m.key);deltaPercent=pv>0?((lastVal-pv)/pv*100):null;compLabel='Total 2026';}else{displayVal=sumField(targetRows,m.key);var pv2=sumField(prevRows,m.key);deltaPercent=pv2>0?((displayVal-pv2)/pv2*100):null;compLabel=prevMonth?'vs '+fmtMonth(prevMonth):'';}var cls=deltaPercent===null?'neutral':deltaPercent>=0?'up':'down';var arrow=deltaPercent===null?'—':(deltaPercent>=0?'▲':'▼')+' '+Math.abs(deltaPercent).toFixed(1)+'%';html+='<div class="kpi" style="animation-delay:'+i*0.05+'s"><div class="kpi-label">'+m.label+'</div><div class="kpi-val">'+fmt(displayVal)+'</div><div class="kpi-delta '+cls+'">'+arrow+'&nbsp;<span style="color:var(--text3)">'+compLabel+'</span></div></div>';}document.getElementById('kpi-row').innerHTML=html;}
 
-function buildMonthFilter(){
-  var months=uniqueSorted(ALL_DATA,'fecha');var sel=document.getElementById('month-filter');
-  while(sel.options.length>1)sel.remove(1);
-  for(var i=0;i<months.length;i++){if(!months[i])continue;var o=document.createElement('option');o.value=months[i];o.textContent=fmtMonth(months[i]);sel.appendChild(o);}
-}
-
-function buildNav(){
-  var props=uniqueSorted(ALL_DATA,'propiedad');var container=document.getElementById('nav-props');container.innerHTML='';
-  for(var i=0;i<props.length;i++){
-    var p=props[i];if(!p)continue;
-    var tag='<div class="plat-tags">';
-    for(var s2=0;s2<TAG_PLATS.length;s2++){
-      var pl=TAG_PLATS[s2];var on=hasData(p,pl);
-      tag+='<span class="plat-tag '+(on?PLAT_ON[pl]:'tag-off')+'" title="'+pl+(on?'':' — no data')+'">'+PLAT_ABBR[pl]+'</span>';
-    }
-    tag+='</div>';
-    var color=PROP_COLORS[p]||FB_COLORS[i%FB_COLORS.length];var el=document.createElement('div');el.className='nav-item';el.setAttribute('data-prop',p);
-    el.innerHTML='<div class="nav-dot" style="background:'+color+'"></div><span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:12px">'+p+'</span>'+tag;
-    el.onclick=(function(prop){return function(){setView(prop)};})(p);container.appendChild(el);
-  }
-  var mobSel=document.getElementById('prop-filter-mobile');
-  if(mobSel){while(mobSel.options.length>1)mobSel.remove(1);
-    for(var k=0;k<props.length;k++){if(!props[k])continue;var mo=document.createElement('option');mo.value=props[k];mo.textContent=props[k];mobSel.appendChild(mo);}
-  }
-}
-
-function setView(prop){
-  currentView=prop;var items=document.querySelectorAll('.nav-item');
-  for(var i=0;i<items.length;i++){var el=items[i];if(prop==='all')el.classList.toggle('active',el.id==='nav-all');else el.classList.toggle('active',el.getAttribute('data-prop')===prop);}
-  document.getElementById('page-title').textContent=prop==='all'?'All Properties':prop;
-  var mobSel=document.getElementById('prop-filter-mobile');if(mobSel)mobSel.value=prop==='all'?'all':prop;
-  render();
-}
-
-// ── RENDER ──
-function render(){
-  var data=getFiltered();
-  var monthSel=document.getElementById('month-filter').value;
-  var isSpecificMonth=monthSel!=='ALL';
-
-  renderKPIs(data);
-  renderFollowersTotal(data,isSpecificMonth,monthSel);
-  renderViewsTotal(data,isSpecificMonth,monthSel);
-  renderEngagement(data);
-  renderDonut(data);
-  renderDonutEngagement(data);
-  renderReviews(isSpecificMonth);
-  renderPlatformRows(isSpecificMonth,monthSel);
-
-  if(isSpecificMonth){
-    renderTable(data);
-    document.getElementById('tbl-sub').textContent=data.length+' records';
-  } else {
-    renderBestMonthTable();
-  }
-}
-
-// ── KPIs ──
-function getFollowersKPI(data,monthSel){
-  var allMonths=uniqueSorted(ALL_DATA,'fecha');
-  var dataMonths=uniqueSorted(data,'fecha');
-  var targetMonth,prevMonth;
-  if(monthSel!=='ALL'){
-    targetMonth=monthSel;var mIdx=allMonths.indexOf(targetMonth);prevMonth=mIdx>0?allMonths[mIdx-1]:null;
-  } else {
-    targetMonth=null;
-    for(var mi=dataMonths.length-1;mi>=0;mi--){
-      var checkRows=getForMonth(dataMonths[mi]);
-      if(sumField(checkRows,'seguidores')>0){targetMonth=dataMonths[mi];break;}
-    }
-    if(!targetMonth)targetMonth=dataMonths[dataMonths.length-1];
-    var tIdx=dataMonths.indexOf(targetMonth);prevMonth=null;
-    for(var mi2=tIdx-1;mi2>=0;mi2--){
-      var checkRows2=getForMonth(dataMonths[mi2]);
-      if(sumField(checkRows2,'seguidores')>0){prevMonth=dataMonths[mi2];break;}
-    }
-  }
-  var targetRows=targetMonth?getForMonth(targetMonth):[];
-  var prevRows=prevMonth?getForMonth(prevMonth):[];
-  var displayVal=sumField(targetRows,'seguidores');
-  var prevVal=sumField(prevRows,'seguidores');
-  var deltaPercent=prevVal>0?((displayVal-prevVal)/prevVal*100):null;
-  var compLabel=monthSel==='ALL'?fmtMonth(targetMonth):(prevMonth?'vs '+fmtMonth(prevMonth):'');
-  return {val:displayVal, delta:deltaPercent, label:compLabel};
-}
-
-function getReviewsKPI(monthSel){
-  var allRevData=ALL_DATA.filter(function(r){return isReview(r)&&(currentView==='all'||r['propiedad']===currentView);});
-  var props=uniqueSorted(allRevData,'propiedad');
-  var allMonths=uniqueSorted(allRevData,'fecha');
-  if(monthSel!=='ALL'){
-    var targetVal=0;var prevVal=0;var mIdx=allMonths.indexOf(monthSel);var prevMonth=mIdx>0?allMonths[mIdx-1]:null;
-    for(var pi=0;pi<props.length;pi++){
-      var p=props[pi];
-      var tRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});
-      targetVal+=tRow.length?(tRow[0][REVIEW_FIELD]||0):0;
-      if(prevMonth){var pRow=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===prevMonth});prevVal+=pRow.length?(pRow[0][REVIEW_FIELD]||0):0;}
-    }
-    var delta=prevVal>0?((targetVal-prevVal)/prevVal*100):null;
-    return {val:targetVal, delta:delta, label:prevMonth?'vs '+fmtMonth(prevMonth):''};
-  } else {
-    var totalVal=0;var latestMonth=null,prevMonth2=null;
-    for(var mi=allMonths.length-1;mi>=0;mi--){
-      var hasAny=allRevData.some(function(r){return r['fecha']===allMonths[mi]&&r[REVIEW_FIELD]>0});
-      if(hasAny){if(!latestMonth){latestMonth=allMonths[mi];}else if(!prevMonth2){prevMonth2=allMonths[mi];break;}}
-    }
-    var latestVal=0,prevVal2=0;
-    for(var pi=0;pi<props.length;pi++){
-      var p=props[pi];var propRows=allRevData.filter(function(r){return r['propiedad']===p});
-      var maxVal=0;for(var ri=0;ri<propRows.length;ri++){if(propRows[ri][REVIEW_FIELD]>maxVal)maxVal=propRows[ri][REVIEW_FIELD];}
-      totalVal+=maxVal;
-      if(latestMonth){var lRow=propRows.filter(function(r){return r['fecha']===latestMonth});latestVal+=lRow.length?(lRow[0][REVIEW_FIELD]||0):0;}
-      if(prevMonth2){var pRow2=propRows.filter(function(r){return r['fecha']===prevMonth2});prevVal2+=pRow2.length?(pRow2[0][REVIEW_FIELD]||0):0;}
-    }
-    var delta2=prevVal2>0?((latestVal-prevVal2)/prevVal2*100):null;
-    return {val:totalVal, delta:delta2, label:latestMonth?fmtMonth(latestMonth):''};
-  }
-}
-
-function renderKPIs(data){
-  var monthSel=document.getElementById('month-filter').value;
-  var allMonths=uniqueSorted(ALL_DATA,'fecha');
-  var dataMonths=uniqueSorted(data,'fecha');
-  var targetMonth,prevMonth;
-  if(monthSel!=='ALL'){targetMonth=monthSel;var mIdx=allMonths.indexOf(targetMonth);prevMonth=mIdx>0?allMonths[mIdx-1]:null;}
-  else{targetMonth=dataMonths[dataMonths.length-1];prevMonth=dataMonths.length>1?dataMonths[dataMonths.length-2]:null;}
-  var targetRows=targetMonth?getForMonth(targetMonth):[];
-  var prevRows=prevMonth?getForMonth(prevMonth):[];
-  var fol=getFollowersKPI(data,monthSel);
-  var grKpi=getReviewsKPI(monthSel);
-
-  var metrics=[
-    {label:'Views',key:'views',special:false},
-    {label:'Followers',key:'seguidores',special:'followers'},
-    {label:'Google Reviews',key:null,special:'reviews'},
-    {label:'Profile Visits',key:'profile_visits',special:false},
-    {label:'Likes',key:'likes',special:false},
-    {label:'Clicks',key:'clicks',special:false},
-    {label:'Posts',key:'posts',special:false},
-    {label:'Comments',key:'comentarios',special:false}
-  ];
-
-  var html='';
-  for(var i=0;i<metrics.length;i++){
-    var m=metrics[i];var displayVal,deltaPercent,compLabel;
-    if(m.special==='followers'){displayVal=fol.val;deltaPercent=fol.delta;compLabel=fol.label;}
-    else if(m.special==='reviews'){displayVal=grKpi.val;deltaPercent=grKpi.delta;compLabel=grKpi.label;}
-    else if(monthSel==='ALL'){displayVal=sumField(data,m.key);var lastVal=sumField(targetRows,m.key);var pv=sumField(prevRows,m.key);deltaPercent=pv>0?((lastVal-pv)/pv*100):null;compLabel='Total 2026';}
-    else{displayVal=sumField(targetRows,m.key);var pv2=sumField(prevRows,m.key);deltaPercent=pv2>0?((displayVal-pv2)/pv2*100):null;compLabel=prevMonth?'vs '+fmtMonth(prevMonth):'';}
-
-    var cls=deltaPercent===null?'neutral':deltaPercent>=0?'up':'down';
-    var arrow=deltaPercent===null?'—':(deltaPercent>=0?'▲':'▼')+' '+Math.abs(deltaPercent).toFixed(1)+'%';
-    html+='<div class="kpi" style="animation-delay:'+i*0.05+'s"><div class="kpi-label">'+m.label+'</div><div class="kpi-val">'+fmt(displayVal)+'</div><div class="kpi-delta '+cls+'">'+arrow+'&nbsp;<span style="color:var(--text3)">'+compLabel+'</span></div></div>';
-  }
-  document.getElementById('kpi-row').innerHTML=html;
-}
-
-// ── CHARTS ──
-Chart.defaults.color='#9898A8';Chart.defaults.font.family="'DM Mono',monospace";Chart.defaults.font.size=10;Chart.defaults.borderColor='#E5E5EA';
+// Charts
+Chart.defaults.color='#9898A8';Chart.defaults.font.family="'Inter',sans-serif";Chart.defaults.font.size=10;Chart.defaults.borderColor='#E5E5EA';
 function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
-
-function renderFollowersTotal(data,isSpecificMonth,monthSel){
-  destroyChart('followers');
-  if(isSpecificMonth){
-    var labels,vals,colors,borders;
-    if(currentView==='all'){var props=uniqueSorted(data,'propiedad');labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});colors=props.map(function(p,i){return(PROP_COLORS[p]||FB_COLORS[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB_COLORS[i%8]});}
-    else{var plats=uniqueSorted(data,'plataforma');labels=plats;vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'seguidores')});colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});}
-    charts.followers=new Chart(document.getElementById('c-followers'),{type:'bar',data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('chart-seg-sub').textContent='total followers · '+fmtMonth(monthSel);
-  } else {
-    var months=uniqueSorted(data,'fecha');var totalPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores');});
-    charts.followers=new Chart(document.getElementById('c-followers'),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Total followers',data:totalPerMonth,borderColor:PROP_COLORS['CS3 Investments']||'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('chart-seg-sub').textContent='total sum · monthly evolution';
-  }
-}
-
-function renderViewsTotal(data,isSpecificMonth,monthSel){
-  destroyChart('views');
-  if(isSpecificMonth){
-    var labels,vals,colors,borders;
-    if(currentView==='all'){var props=uniqueSorted(data,'propiedad');labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});colors=props.map(function(p,i){return(PROP_COLORS[p]||FB_COLORS[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB_COLORS[i%8]});}
-    else{var plats=uniqueSorted(data,'plataforma');labels=plats;vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views')});colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});}
-    charts.views=new Chart(document.getElementById('c-views'),{type:'bar',data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('chart-views-sub').textContent='total views · '+fmtMonth(monthSel);
-  } else {
-    var months=uniqueSorted(data,'fecha');var totalPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views');});
-    charts.views=new Chart(document.getElementById('c-views'),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Total views',data:totalPerMonth,borderColor:'#059669',backgroundColor:'rgba(5,150,105,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('chart-views-sub').textContent='total sum · monthly evolution';
-  }
-}
-
-function renderEngagement(data){
-  destroyChart('engagement');var props=uniqueSorted(data,'propiedad');
-  var vals=props.map(function(p){var rows=data.filter(function(r){return r['propiedad']===p});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});
-  charts.engagement=new Chart(document.getElementById('c-engagement'),{type:'bar',
-    data:{labels:props.map(function(p){return p.length>13?p.slice(0,12)+'…':p}),datasets:[{data:vals,backgroundColor:vals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),borderColor:vals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),borderWidth:1,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}
-  });
-}
-
-function renderDonut(data){
-  destroyChart('donut');
-  var vals=SOCIAL.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views');});
-  charts.donut=new Chart(document.getElementById('c-donut'),{type:'doughnut',data:{labels:SOCIAL,datasets:[{data:vals,backgroundColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]+'22'}),borderColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]}),borderWidth:1.5,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.parsed)}}}}}});
-}
-
-function renderDonutEngagement(data){
-  destroyChart('donut-eng');
-  var vals=SOCIAL.map(function(pl){var platData=data.filter(function(r){return r['plataforma']===pl});var v=sumField(platData,'views'),l=sumField(platData,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});
-  charts['donut-eng']=new Chart(document.getElementById('c-donut-eng'),{type:'doughnut',data:{labels:SOCIAL,datasets:[{data:vals,backgroundColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]+'22'}),borderColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]}),borderWidth:1.5,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed.toFixed(2)+'%'}}}}}});
-}
-
-function reviewCount(rows){
-  if(!rows.length)return 0;
-  if(REVIEW_MODE==='sum')return sumField(rows,REVIEW_FIELD);
-  var sorted=rows.slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
-  for(var i=sorted.length-1;i>=0;i--){if(sorted[i][REVIEW_FIELD]>0)return sorted[i][REVIEW_FIELD];}
-  return 0;
-}
-
-// Helper: get NEW reviews per month (diff from previous month), only counting positive diffs
-function getNewReviewsPerMonth(revData,props){
-  var allMonths=uniqueSorted(revData,'fecha');
-  // Filter to months that actually have data (reviews > 0 for at least one property)
-  var activeMonths=allMonths.filter(function(m){
-    return revData.some(function(r){return r['fecha']===m&&r[REVIEW_FIELD]>0;});
-  });
-  var newPerMonth=[];
-  for(var mi=0;mi<activeMonths.length;mi++){
-    var m=activeMonths[mi];
-    var totalNew=0;
-    for(var pi=0;pi<props.length;pi++){
-      var p=props[pi];
-      var curRow=revData.filter(function(r){return r['propiedad']===p&&r['fecha']===m;});
-      var curVal=curRow.length?(curRow[0][REVIEW_FIELD]||0):0;
-      // Find previous month for this property
-      var prevVal=0;
-      if(mi>0){
-        var prevM=activeMonths[mi-1];
-        var prevRow=revData.filter(function(r){return r['propiedad']===p&&r['fecha']===prevM;});
-        prevVal=prevRow.length?(prevRow[0][REVIEW_FIELD]||0):0;
-      }
-      var diff=curVal-prevVal;
-      if(diff>0) totalNew+=diff;
-    }
-    newPerMonth.push({month:m,newReviews:totalNew});
-  }
-  return {months:activeMonths,data:newPerMonth};
-}
+function renderFollowersTotal(data,isSpecificMonth,monthSel){destroyChart('followers');if(isSpecificMonth){var labels,vals,colors,borders;if(currentView==='all'){var props=uniqueSorted(data,'propiedad');labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});colors=props.map(function(p,i){return(PROP_COLORS[p]||FB_COLORS[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB_COLORS[i%8]});}else{var plats=uniqueSorted(data,'plataforma');labels=plats;vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'seguidores')});colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});}charts.followers=new Chart(document.getElementById('c-followers'),{type:'bar',data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('chart-seg-sub').textContent='total followers · '+fmtMonth(monthSel);}else{var months=uniqueSorted(data,'fecha');var totalPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores');});charts.followers=new Chart(document.getElementById('c-followers'),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Total followers',data:totalPerMonth,borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('chart-seg-sub').textContent='total sum · monthly evolution';}}
+function renderViewsTotal(data,isSpecificMonth,monthSel){destroyChart('views');if(isSpecificMonth){var labels,vals,colors,borders;if(currentView==='all'){var props=uniqueSorted(data,'propiedad');labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});vals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});colors=props.map(function(p,i){return(PROP_COLORS[p]||FB_COLORS[i%8])+'40'});borders=props.map(function(p,i){return PROP_COLORS[p]||FB_COLORS[i%8]});}else{var plats=uniqueSorted(data,'plataforma');labels=plats;vals=plats.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views')});colors=plats.map(function(pl){return(PLAT_COLORS[pl]||'#4F46E5')+'40'});borders=plats.map(function(pl){return PLAT_COLORS[pl]||'#4F46E5'});}charts.views=new Chart(document.getElementById('c-views'),{type:'bar',data:{labels:labels,datasets:[{data:vals,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('chart-views-sub').textContent='total views · '+fmtMonth(monthSel);}else{var months=uniqueSorted(data,'fecha');var totalPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views');});charts.views=new Chart(document.getElementById('c-views'),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Total views',data:totalPerMonth,borderColor:'#059669',backgroundColor:'rgba(5,150,105,.08)',fill:true,borderWidth:2,pointRadius:4,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('chart-views-sub').textContent='total sum · monthly evolution';}}
+function renderEngagement(data){destroyChart('engagement');var props=uniqueSorted(data,'propiedad');var vals=props.map(function(p){var rows=data.filter(function(r){return r['propiedad']===p});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});charts.engagement=new Chart(document.getElementById('c-engagement'),{type:'bar',data:{labels:props.map(function(p){return p.length>13?p.slice(0,12)+'…':p}),datasets:[{data:vals,backgroundColor:vals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),borderColor:vals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}});}
+function renderDonut(data){destroyChart('donut');var vals=SOCIAL.map(function(pl){return sumField(data.filter(function(r){return r['plataforma']===pl}),'views');});charts.donut=new Chart(document.getElementById('c-donut'),{type:'doughnut',data:{labels:SOCIAL,datasets:[{data:vals,backgroundColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]+'22'}),borderColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]}),borderWidth:1.5,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.parsed)}}}}}});}
+function renderDonutEngagement(data){destroyChart('donut-eng');var vals=SOCIAL.map(function(pl){var pd=data.filter(function(r){return r['plataforma']===pl});var v=sumField(pd,'views'),l=sumField(pd,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});charts['donut-eng']=new Chart(document.getElementById('c-donut-eng'),{type:'doughnut',data:{labels:SOCIAL,datasets:[{data:vals,backgroundColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]+'22'}),borderColor:SOCIAL.map(function(pl){return PLAT_COLORS[pl]}),borderWidth:1.5,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed.toFixed(2)+'%'}}}}}});}
+function reviewCount(rows){if(!rows.length)return 0;if(REVIEW_MODE==='sum')return sumField(rows,REVIEW_FIELD);var sorted=rows.slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});for(var i=sorted.length-1;i>=0;i--){if(sorted[i][REVIEW_FIELD]>0)return sorted[i][REVIEW_FIELD];}return 0;}
 
 function renderReviews(isSpecificMonth){
   destroyChart('reviews');
@@ -634,219 +322,98 @@ function renderReviews(isSpecificMonth){
   var props=uniqueSorted(allRevData,'propiedad');
   var allMonths=uniqueSorted(allRevData,'fecha');
   var legendEl=document.getElementById('gr-legend');
+  // Active months = months where at least one prop has reviews > 0
+  var activeMonths=allMonths.filter(function(m){return allRevData.some(function(r){return r['fecha']===m&&r[REVIEW_FIELD]>0;});});
 
   if(currentView==='all'){
     if(!isSpecificMonth){
-      // VIEW 1.1: Timeline (sum all props per month) + legend: avg NEW reviews per month, count per property
-      var activeMonths=allMonths.filter(function(m){return allRevData.some(function(r){return r['fecha']===m&&r[REVIEW_FIELD]>0;});});
-      var timelineLabels=activeMonths.map(fmtMonth);
-      var timelineVals=activeMonths.map(function(m){
-        var total=0;
+      // 1.1: Timeline + summary legend (avg new/month + per property totals)
+      var timelineVals=activeMonths.map(function(m){var t=0;for(var pi=0;pi<props.length;pi++){var row=allRevData.filter(function(r){return r['propiedad']===props[pi]&&r['fecha']===m});t+=row.length?(row[0][REVIEW_FIELD]||0):0;}return t;});
+      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'line',data:{labels:activeMonths.map(fmtMonth),datasets:[{label:'Total Reviews',data:timelineVals,borderColor:'#E65100',backgroundColor:'#E6510015',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}});
+      // Avg NEW per month: for each month, sum (curVal - prevVal) across props (only positive diffs), then average
+      var totalNew=0,countMonths=0;
+      for(var mi=1;mi<activeMonths.length;mi++){
+        var monthNew=0;
         for(var pi=0;pi<props.length;pi++){
-          var row=allRevData.filter(function(r){return r['propiedad']===props[pi]&&r['fecha']===m});
-          total+=row.length?(row[0][REVIEW_FIELD]||0):0;
+          var curRow=allRevData.filter(function(r){return r['propiedad']===props[pi]&&r['fecha']===activeMonths[mi]});
+          var prevRow=allRevData.filter(function(r){return r['propiedad']===props[pi]&&r['fecha']===activeMonths[mi-1]});
+          var cur=curRow.length?(curRow[0][REVIEW_FIELD]||0):0;
+          var prev=prevRow.length?(prevRow[0][REVIEW_FIELD]||0):0;
+          var diff=cur-prev;if(diff>0)monthNew+=diff;
         }
-        return total;
-      });
-
-      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'line',
-        data:{labels:timelineLabels,datasets:[{label:'Total Reviews',data:timelineVals,borderColor:'#E65100',backgroundColor:'#E6510015',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
-      });
-
-      // Calculate avg NEW reviews per month (not total/months)
-      var newData=getNewReviewsPerMonth(allRevData,props);
-      var totalNewReviews=0;
-      for(var i=0;i<newData.data.length;i++) totalNewReviews+=newData.data[i].newReviews;
-      var avgNewPerMonth=newData.data.length>1?(totalNewReviews/(newData.data.length-1)).toFixed(1):0; // skip first month since it has no "previous"
-
-      var legendHtml='<div class="gr-legend-title">Summary</div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Avg new reviews / month</span><span class="gr-legend-val">'+avgNewPerMonth+'</span></div>';
-      for(var pi=0;pi<props.length;pi++){
-        var p=props[pi];
-        var propMax=reviewCount(allRevData.filter(function(r){return r['propiedad']===p}));
-        legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">'+p+'</span><span class="gr-legend-val">'+fmt(propMax)+'</span></div>';
+        totalNew+=monthNew;countMonths++;
       }
-      legendEl.innerHTML=legendHtml;
-      var totalAll=timelineVals.length?timelineVals[timelineVals.length-1]:0;
-      document.getElementById('chart-gr-sub').textContent=fmt(totalAll)+' total reviews · timeline';
-
+      var avgNew=countMonths>0?(totalNew/countMonths).toFixed(1):'0';
+      var h='<div class="gr-legend-title">Summary</div>';
+      h+='<div class="gr-legend-row-simple"><span class="gr-legend-label">Avg new reviews / month</span><span class="gr-legend-val">'+avgNew+'</span></div>';
+      for(var pi=0;pi<props.length;pi++){var propMax=reviewCount(allRevData.filter(function(r){return r['propiedad']===props[pi]}));h+='<div class="gr-legend-row-simple"><span class="gr-legend-label">'+props[pi]+'</span><span class="gr-legend-val">'+fmt(propMax)+'</span></div>';}
+      legendEl.innerHTML=h;
+      document.getElementById('chart-gr-sub').textContent=fmt(timelineVals.length?timelineVals[timelineVals.length-1]:0)+' total reviews · timeline';
     } else {
-      // VIEW 1.2: Bar chart per property with stacked green for new + table
-      var prevMonth=null;var mIdx=allMonths.indexOf(monthSel);
-      if(mIdx>0) prevMonth=allMonths[mIdx-1];
-
-      var currentVals=props.map(function(p){var row=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});return row.length?(row[0][REVIEW_FIELD]||0):0;});
+      // 1.2: Bars per property stacked + table with TOTAL and NEW columns
+      var prevMonth=null;var mIdx=allMonths.indexOf(monthSel);if(mIdx>0)prevMonth=allMonths[mIdx-1];
+      var curVals=props.map(function(p){var row=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===monthSel});return row.length?(row[0][REVIEW_FIELD]||0):0;});
       var prevVals=props.map(function(p){if(!prevMonth)return 0;var row=allRevData.filter(function(r){return r['propiedad']===p&&r['fecha']===prevMonth});return row.length?(row[0][REVIEW_FIELD]||0):0;});
-      var newVals=currentVals.map(function(v,i){return Math.max(0,v-prevVals[i])});
-      var baseVals=prevMonth?prevVals:currentVals;
-      var greenVals=prevMonth?newVals:currentVals.map(function(){return 0});
-      var labels=props.map(function(p){return p.length>15?p.slice(0,14)+'…':p});
-
-      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',
-        data:{labels:labels,datasets:[
-          {label:'Existing',data:baseVals,backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4},
-          {label:'New this month',data:greenVals,backgroundColor:'#05966940',borderColor:'#059669',borderWidth:1,borderRadius:4}
-        ]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
-      });
-
-      var legendHtml='<div class="gr-legend-title">'+fmtMonth(monthSel)+'</div>';
-      for(var pi=0;pi<props.length;pi++){
-        legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">'+props[pi]+'</span><span class="gr-legend-val">'+currentVals[pi]+'<span class="gr-new">'+(greenVals[pi]>0?'+'+greenVals[pi]:'—')+'</span></span></div>';
-      }
-      legendEl.innerHTML=legendHtml;
-      var totalMonth=currentVals.reduce(function(a,b){return a+b},0);
-      document.getElementById('chart-gr-sub').textContent=fmt(totalMonth)+' reviews · '+fmtMonth(monthSel);
+      var newVals=curVals.map(function(v,i){return Math.max(0,v-prevVals[i])});
+      var baseVals=prevMonth?prevVals:curVals;
+      var greenVals=prevMonth?newVals:curVals.map(function(){return 0});
+      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',data:{labels:props.map(function(p){return p.length>15?p.slice(0,14)+'…':p}),datasets:[{label:'Existing',data:baseVals,backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4},{label:'New',data:greenVals,backgroundColor:'#05966940',borderColor:'#059669',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}});
+      // Legend: table with Total | New columns
+      var h='<div class="gr-legend-title">'+fmtMonth(monthSel)+'</div>';
+      h+='<div class="gr-legend-header"><span>Property</span><span>Total</span><span>New</span></div>';
+      for(var pi=0;pi<props.length;pi++){h+='<div class="gr-legend-row"><span class="gr-legend-label">'+props[pi]+'</span><span class="gr-legend-val">'+curVals[pi]+'</span><span class="gr-legend-new">'+(greenVals[pi]>0?'+'+greenVals[pi]:'—')+'</span></div>';}
+      legendEl.innerHTML=h;
+      document.getElementById('chart-gr-sub').textContent=fmt(curVals.reduce(function(a,b){return a+b},0))+' reviews · '+fmtMonth(monthSel);
     }
   } else {
-    // ── SINGLE PROPERTY ──
+    // Single property
     var propRevData=allRevData.filter(function(r){return r['propiedad']===currentView});
-    var propMonths=uniqueSorted(propRevData,'fecha');
-    // Filter to months with actual data
-    var activeMonths=propMonths.filter(function(m){return propRevData.some(function(r){return r['fecha']===m&&r[REVIEW_FIELD]>0;});});
-
+    var propActive=activeMonths.filter(function(m){return propRevData.some(function(r){return r['fecha']===m&&r[REVIEW_FIELD]>0;});});
     if(!isSpecificMonth){
-      // VIEW 2.1: Timeline for this property (only months with data) + legend: Total, last 30 days, last 6 months
-      var timelineLabels=activeMonths.map(fmtMonth);
-      var timelineVals=activeMonths.map(function(m){var row=propRevData.filter(function(r){return r['fecha']===m});return row.length?(row[0][REVIEW_FIELD]||0):0;});
-
-      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'line',
-        data:{labels:timelineLabels,datasets:[{label:'Reviews',data:timelineVals,borderColor:'#E65100',backgroundColor:'#E6510015',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
-      });
-
-      var totalProp=timelineVals.length?timelineVals[timelineVals.length-1]:0;
-      var last30=0,last6=0;
-      if(activeMonths.length>=2) last30=timelineVals[activeMonths.length-1]-timelineVals[activeMonths.length-2];
-      if(activeMonths.length>=7){last6=timelineVals[activeMonths.length-1]-timelineVals[activeMonths.length-7];}
-      else if(activeMonths.length>=2){last6=timelineVals[activeMonths.length-1]-timelineVals[0];}
-
-      var legendHtml='<div class="gr-legend-title">'+currentView+'</div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Total</span><span class="gr-legend-val">'+fmt(totalProp)+'</span></div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Last 30 days</span><span class="gr-legend-val" style="color:'+(last30>=0?'var(--green)':'var(--red)')+'">'+(last30>=0?'+':'')+last30+'</span></div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Last 6 months</span><span class="gr-legend-val" style="color:'+(last6>=0?'var(--green)':'var(--red)')+'">'+(last6>=0?'+':'')+last6+'</span></div>';
-      legendEl.innerHTML=legendHtml;
-      document.getElementById('chart-gr-sub').textContent=fmt(totalProp)+' reviews · '+currentView;
-
+      // 2.1: Timeline + Total, last 30 days, last 6 months
+      var vals=propActive.map(function(m){var row=propRevData.filter(function(r){return r['fecha']===m});return row.length?(row[0][REVIEW_FIELD]||0):0;});
+      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'line',data:{labels:propActive.map(fmtMonth),datasets:[{label:'Reviews',data:vals,borderColor:'#E65100',backgroundColor:'#E6510015',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}});
+      var total=vals.length?vals[vals.length-1]:0;
+      var last30=vals.length>=2?vals[vals.length-1]-vals[vals.length-2]:0;
+      var last6=vals.length>=7?vals[vals.length-1]-vals[vals.length-7]:(vals.length>=2?vals[vals.length-1]-vals[0]:0);
+      var h='<div class="gr-legend-title">'+currentView+'</div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">Total</span><span class="gr-legend-val">'+fmt(total)+'</span></div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">Last 30 days</span><span class="gr-legend-val" style="color:'+(last30>=0?'var(--green)':'var(--red)')+'">'+(last30>=0?'+':'')+last30+'</span></div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">Last 6 months</span><span class="gr-legend-val" style="color:'+(last6>=0?'var(--green)':'var(--red)')+'">'+(last6>=0?'+':'')+last6+'</span></div>';
+      legendEl.innerHTML=h;
+      document.getElementById('chart-gr-sub').textContent=fmt(total)+' reviews · '+currentView;
     } else {
-      // VIEW 2.2: Bar with green stacked new + table: previous month, new reviews, total reviews
-      var prevMonth=null;var mIdx=activeMonths.indexOf(monthSel);
-      if(mIdx<0){var allM2=uniqueSorted(allRevData,'fecha');mIdx=allM2.indexOf(monthSel);if(mIdx>0) prevMonth=allM2[mIdx-1];}
-      else{if(mIdx>0) prevMonth=activeMonths[mIdx-1];}
-
-      var curRow=propRevData.filter(function(r){return r['fecha']===monthSel});
-      var curVal=curRow.length?(curRow[0][REVIEW_FIELD]||0):0;
-      var prevRow=prevMonth?propRevData.filter(function(r){return r['fecha']===prevMonth}):[];
-      var prevVal=prevRow.length?(prevRow[0][REVIEW_FIELD]||0):0;
+      // 2.2: Bar stacked + previous month, new reviews, total reviews
+      var prevMonth=null;var mIdx=propActive.indexOf(monthSel);
+      if(mIdx<0){var allM2=uniqueSorted(allRevData,'fecha');mIdx=allM2.indexOf(monthSel);if(mIdx>0)prevMonth=allM2[mIdx-1];}else{if(mIdx>0)prevMonth=propActive[mIdx-1];}
+      var curRow=propRevData.filter(function(r){return r['fecha']===monthSel});var curVal=curRow.length?(curRow[0][REVIEW_FIELD]||0):0;
+      var prevRow=prevMonth?propRevData.filter(function(r){return r['fecha']===prevMonth}):[];var prevVal=prevRow.length?(prevRow[0][REVIEW_FIELD]||0):0;
       var newVal=Math.max(0,curVal-prevVal);
-
-      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',
-        data:{labels:[currentView],datasets:[
-          {label:'Previous',data:[prevVal],backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4},
-          {label:'New',data:[newVal],backgroundColor:'#05966940',borderColor:'#059669',borderWidth:1,borderRadius:4}
-        ]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}
-      });
-
-      var legendHtml='<div class="gr-legend-title">'+fmtMonth(monthSel)+'</div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Previous month</span><span class="gr-legend-val">'+fmt(prevVal)+'</span></div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">New reviews</span><span class="gr-legend-val" style="color:var(--green)">+'+(newVal)+'</span></div>';
-      legendHtml+='<div class="gr-legend-row"><span class="gr-legend-label">Total reviews</span><span class="gr-legend-val" style="font-size:18px">'+fmt(curVal)+'</span></div>';
-      legendEl.innerHTML=legendHtml;
+      charts.reviews=new Chart(document.getElementById('c-reviews'),{type:'bar',data:{labels:[currentView],datasets:[{label:'Previous',data:[prevVal],backgroundColor:'#E6510028',borderColor:'#E65100',borderWidth:1,borderRadius:4},{label:'New',data:[newVal],backgroundColor:'#05966940',borderColor:'#059669',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#F3F3F6'},ticks:{precision:0,callback:function(v){return fmt(v)}}}}}});
+      var h='<div class="gr-legend-title">'+fmtMonth(monthSel)+'</div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">Previous month</span><span class="gr-legend-val">'+fmt(prevVal)+'</span></div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">New reviews</span><span class="gr-legend-val" style="color:var(--green)">+'+newVal+'</span></div>';
+      h+='<div class="gr-legend-row-prop"><span class="gr-legend-label">Total reviews</span><span class="gr-legend-val" style="font-size:20px">'+fmt(curVal)+'</span></div>';
+      legendEl.innerHTML=h;
       document.getElementById('chart-gr-sub').textContent=fmt(curVal)+' reviews · '+fmtMonth(monthSel);
     }
   }
 }
 
-// ── PLATFORM ROWS ──
-function renderPlatformRows(isSpecificMonth,monthSel){
-  var container=document.getElementById('platform-rows');
-  for(var pi=0;pi<SOCIAL.length;pi++){destroyChart('plat-seg-'+SOCIAL[pi]);destroyChart('plat-views-'+SOCIAL[pi]);destroyChart('plat-eng-'+SOCIAL[pi]);}
-  var html='';
-  for(var pi=0;pi<SOCIAL.length;pi++){
-    var plat=SOCIAL[pi];var cssClass=PLAT_CSS_CLASS[plat]||'';
-    html+='<div class="plat-section '+cssClass+'"><div class="plat-section-hd"><div class="plat-section-dot" style="background:'+PLAT_COLORS[plat]+'"></div><div class="plat-section-label">'+plat+'</div></div><div class="plat-section-grid">';
-    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Followers</div><div class="card-sub" id="plat-seg-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-seg-'+plat+'"></canvas></div></div>';
-    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Views</div><div class="card-sub" id="plat-views-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-views-'+plat+'"></canvas></div></div>';
-    html+='<div class="card"><div class="card-hd"><div><div class="card-title">Engagement Rate</div><div class="card-sub" id="plat-eng-sub-'+plat+'">likes / views × 100</div></div></div><div style="height:160px"><canvas id="c-plat-eng-'+plat+'"></canvas></div></div>';
-    html+='</div></div>';
-  }
-  container.innerHTML=html;
-  for(var pi=0;pi<SOCIAL.length;pi++){var plat=SOCIAL[pi];var platData=getFilteredByPlatform(plat);renderPlatformChart(plat,platData,isSpecificMonth,monthSel);}
-}
+// Platform rows
+function renderPlatformRows(isSpecificMonth,monthSel){var container=document.getElementById('platform-rows');for(var pi=0;pi<SOCIAL.length;pi++){destroyChart('plat-seg-'+SOCIAL[pi]);destroyChart('plat-views-'+SOCIAL[pi]);destroyChart('plat-eng-'+SOCIAL[pi]);}var html='';for(var pi=0;pi<SOCIAL.length;pi++){var plat=SOCIAL[pi];var cssClass=PLAT_CSS_CLASS[plat]||'';html+='<div class="plat-section '+cssClass+'"><div class="plat-section-hd"><div class="plat-section-dot" style="background:'+PLAT_COLORS[plat]+'"></div><div class="plat-section-label">'+plat+'</div></div><div class="plat-section-grid">';html+='<div class="card"><div class="card-hd"><div><div class="card-title">Followers</div><div class="card-sub" id="plat-seg-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-seg-'+plat+'"></canvas></div></div>';html+='<div class="card"><div class="card-hd"><div><div class="card-title">Views</div><div class="card-sub" id="plat-views-sub-'+plat+'">—</div></div></div><div style="height:160px"><canvas id="c-plat-views-'+plat+'"></canvas></div></div>';html+='<div class="card"><div class="card-hd"><div><div class="card-title">Engagement Rate</div><div class="card-sub" id="plat-eng-sub-'+plat+'">likes / views × 100</div></div></div><div style="height:160px"><canvas id="c-plat-eng-'+plat+'"></canvas></div></div>';html+='</div></div>';}container.innerHTML=html;for(var pi=0;pi<SOCIAL.length;pi++){var plat=SOCIAL[pi];renderPlatformChart(plat,getFilteredByPlatform(plat),isSpecificMonth,monthSel);}}
+function renderPlatformChart(plat,data,isSpecificMonth,monthSel){var segId='plat-seg-'+plat,viewsId='plat-views-'+plat,engId='plat-eng-'+plat,color=PLAT_COLORS[plat];if(isSpecificMonth){var props=uniqueSorted(data,'propiedad');var labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});var segVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'bar',data:{labels:labels,datasets:[{data:segVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('plat-seg-sub-'+plat).textContent=fmtMonth(monthSel);var viewVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'bar',data:{labels:labels,datasets:[{data:viewVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('plat-views-sub-'+plat).textContent=fmtMonth(monthSel);var engVals=props.map(function(p){var rows=data.filter(function(r){return r['propiedad']===p});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'bar',data:{labels:labels,datasets:[{data:engVals,backgroundColor:engVals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),borderColor:engVals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}});}else{var months=uniqueSorted(data,'fecha');var segPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores')});var viewsPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views')});var engPerMonth=months.map(function(m){var rows=data.filter(function(r){return r['fecha']===m});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Followers',data:segPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('plat-seg-sub-'+plat).textContent='monthly evolution';charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Views',data:viewsPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});document.getElementById('plat-views-sub-'+plat).textContent='monthly evolution';charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Engagement',data:engPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}});}}
 
-function renderPlatformChart(plat,data,isSpecificMonth,monthSel){
-  var segId='plat-seg-'+plat,viewsId='plat-views-'+plat,engId='plat-eng-'+plat,color=PLAT_COLORS[plat];
-  if(isSpecificMonth){
-    var props=uniqueSorted(data,'propiedad');var labels=props.map(function(p){return p.length>13?p.slice(0,12)+'…':p});
-    var segVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'seguidores')});
-    charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'bar',data:{labels:labels,datasets:[{data:segVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('plat-seg-sub-'+plat).textContent=fmtMonth(monthSel);
-    var viewVals=props.map(function(p){return sumField(data.filter(function(r){return r['propiedad']===p}),'views')});
-    charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'bar',data:{labels:labels,datasets:[{data:viewVals,backgroundColor:color+'28',borderColor:color,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('plat-views-sub-'+plat).textContent=fmtMonth(monthSel);
-    var engVals=props.map(function(p){var rows=data.filter(function(r){return r['propiedad']===p});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});
-    charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'bar',data:{labels:labels,datasets:[{data:engVals,backgroundColor:engVals.map(function(v){return v>=5?'#ECFDF5':v>=2.5?'#FFFBEB':'#FEF2F2'}),borderColor:engVals.map(function(v){return v>=5?'#059669':v>=2.5?'#D97706':'#DC2626'}),borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}});
-  } else {
-    var months=uniqueSorted(data,'fecha');
-    var segPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'seguidores')});
-    var viewsPerMonth=months.map(function(m){return sumField(data.filter(function(r){return r['fecha']===m}),'views')});
-    var engPerMonth=months.map(function(m){var rows=data.filter(function(r){return r['fecha']===m});var v=sumField(rows,'views'),l=sumField(rows,'likes');return v>0?parseFloat((l/v*100).toFixed(2)):0;});
-    charts[segId]=new Chart(document.getElementById('c-'+segId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Followers',data:segPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('plat-seg-sub-'+plat).textContent='monthly evolution';
-    charts[viewsId]=new Chart(document.getElementById('c-'+viewsId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Views',data:viewsPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return fmt(v)}}}}}});
-    document.getElementById('plat-views-sub-'+plat).textContent='monthly evolution';
-    charts[engId]=new Chart(document.getElementById('c-'+engId),{type:'line',data:{labels:months.map(fmtMonth),datasets:[{label:'Engagement',data:engPerMonth,borderColor:color,backgroundColor:color+'12',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toFixed(2)+'%'}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#F3F3F6'},ticks:{callback:function(v){return v+'%'}}}}}});
-  }
-}
+// Tables
+function renderTable(data){var deltaMap={};for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}var sorted=data.slice().sort(function(a,b){if(b['fecha']!==a['fecha'])return b['fecha']<a['fecha']?-1:1;return a['propiedad']<b['propiedad']?-1:1;});var html='';for(var i=0;i<Math.min(sorted.length,80);i++){var r=sorted[i];var eng=r['views']>0?(r['likes']/r['views']*100):0;var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';var platCls=PLAT_PILL[r['plataforma']]||'pill-ig';var key=r['propiedad']+'|'+r['plataforma'];var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}var dCell='<span style="color:var(--text3)">—</span>';if(idx>0){var diff=r['seguidores']-hist[idx-1]['seguidores'];if(diff!==0){var cls2=diff>0?'up':'down';dCell='<span class="'+cls2+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';}}html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+r['plataforma']+'</span></td><td>'+fmtMonth(r['fecha'])+'</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';}document.getElementById('tbl-body').innerHTML=html;}
+function renderBestMonthTable(){var data=getFiltered();var props=uniqueSorted(data,'propiedad');var html='';var deltaMap={};for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}for(var pi=0;pi<props.length;pi++){var prop=props[pi];for(var si=0;si<SOCIAL.length;si++){var plat=SOCIAL[si];var rows=data.filter(function(r){return r['propiedad']===prop&&r['plataforma']===plat});if(!rows.length)continue;var best=rows[0];for(var ri=1;ri<rows.length;ri++){if(rows[ri]['views']>best['views'])best=rows[ri];}if(best['views']===0){for(var ri=1;ri<rows.length;ri++){if(rows[ri]['likes']>best['likes'])best=rows[ri];}}var r=best;var eng=r['views']>0?(r['likes']/r['views']*100):0;var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';var platCls=PLAT_PILL[plat]||'pill-ig';var key=prop+'|'+plat;var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}var dCell='<span style="color:var(--text3)">—</span>';if(idx>0){var diff=r['seguidores']-hist[idx-1]['seguidores'];if(diff!==0){var cls2=diff>0?'up':'down';dCell='<span class="'+cls2+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';}}html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+plat+'</span></td><td>'+fmtMonth(r['fecha'])+' ⭐</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';}}document.getElementById('tbl-body').innerHTML=html;var count=document.querySelectorAll('#tbl-body tr').length;document.getElementById('tbl-sub').textContent=count+' records · best month per channel';}
 
-// ── TABLES ──
-function renderTable(data){
-  var deltaMap={};for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}
-  var sorted=data.slice().sort(function(a,b){if(b['fecha']!==a['fecha'])return b['fecha']<a['fecha']?-1:1;return a['propiedad']<b['propiedad']?-1:1;});
-  var html='';
-  for(var i=0;i<Math.min(sorted.length,80);i++){
-    var r=sorted[i];var eng=r['views']>0?(r['likes']/r['views']*100):0;var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';var platCls=PLAT_PILL[r['plataforma']]||'pill-ig';
-    var key=r['propiedad']+'|'+r['plataforma'];var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
-    var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}
-    var dCell='<span style="color:var(--text3)">—</span>';
-    if(idx>0){var diff=r['seguidores']-hist[idx-1]['seguidores'];if(diff!==0){var cls2=diff>0?'up':'down';dCell='<span class="'+cls2+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';}}
-    html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+r['plataforma']+'</span></td><td>'+fmtMonth(r['fecha'])+'</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';
-  }
-  document.getElementById('tbl-body').innerHTML=html;
-}
-
-function renderBestMonthTable(){
-  var data=getFiltered();var props=uniqueSorted(data,'propiedad');var html='';
-  var deltaMap={};for(var i=0;i<ALL_DATA.length;i++){var r=ALL_DATA[i];var key=r['propiedad']+'|'+r['plataforma'];if(!deltaMap[key])deltaMap[key]=[];deltaMap[key].push(r);}
-  for(var pi=0;pi<props.length;pi++){
-    var prop=props[pi];
-    for(var si=0;si<SOCIAL.length;si++){
-      var plat=SOCIAL[si];var rows=data.filter(function(r){return r['propiedad']===prop&&r['plataforma']===plat});if(!rows.length)continue;
-      var best=rows[0];for(var ri=1;ri<rows.length;ri++){if(rows[ri]['views']>best['views'])best=rows[ri];}
-      if(best['views']===0){for(var ri=1;ri<rows.length;ri++){if(rows[ri]['likes']>best['likes'])best=rows[ri];}}
-      var r=best;var eng=r['views']>0?(r['likes']/r['views']*100):0;var engCls=eng>=5?'eng-good':eng>=2.5?'eng-mid':'eng-low';var platCls=PLAT_PILL[plat]||'pill-ig';
-      var key=prop+'|'+plat;var hist=(deltaMap[key]||[]).slice().sort(function(a,b){return a['fecha']<b['fecha']?-1:1;});
-      var idx=-1;for(var j=0;j<hist.length;j++){if(hist[j]['fecha']===r['fecha']){idx=j;break;}}
-      var dCell='<span style="color:var(--text3)">—</span>';
-      if(idx>0){var diff=r['seguidores']-hist[idx-1]['seguidores'];if(diff!==0){var cls2=diff>0?'up':'down';dCell='<span class="'+cls2+'">'+(diff>0?'+':'')+fmt(diff)+'</span>';}}
-      html+='<tr><td class="prop-cell">'+r['propiedad']+'</td><td><span class="plat-pill '+platCls+'">'+plat+'</span></td><td>'+fmtMonth(r['fecha'])+' ⭐</td><td>'+fmt(r['seguidores'])+'</td><td>'+dCell+'</td><td>'+fmt(r['views'])+'</td><td>'+fmt(r['likes'])+'</td><td>'+fmt(r['comentarios'])+'</td><td>'+fmt(r['clicks'])+'</td><td>'+(r['posts']||'—')+'</td><td><span class="eng-badge '+engCls+'">'+eng.toFixed(2)+'%</span></td></tr>';
-    }
-  }
-  document.getElementById('tbl-body').innerHTML=html;
-  var count=document.querySelectorAll('#tbl-body tr').length;
-  document.getElementById('tbl-sub').textContent=count+' records · best month per channel';
-}
-
-// ── HELPERS ──
 function sumField(arr,key){var t=0;for(var i=0;i<arr.length;i++)t+=(arr[i][key]||0);return t;}
 function uniqueSorted(arr,key){var seen={},out=[];for(var i=0;i<arr.length;i++){var v=arr[i][key];if(v&&!seen[v]){seen[v]=true;out.push(v);}}return out.sort();}
 function fmt(n){if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
 function fmtMonth(iso){if(!iso)return'';var p=iso.split('-');var names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return(names[parseInt(p[1],10)-1]||p[1])+' '+p[0];}
 function setStatus(type,msg){var el=document.getElementById('status');el.textContent=msg;el.className='status-pill'+(type!=='ok'?' '+type:'');}
-loadData();
-setInterval(loadData, 5 * 60 * 1000);
+loadData();setInterval(loadData,5*60*1000);
 </script>
 </body>
 </html>
