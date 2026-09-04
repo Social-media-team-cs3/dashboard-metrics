@@ -122,6 +122,9 @@ tbody tr:hover td{background:var(--surface2)}
 .weekly-phone::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:40px;height:5px;background:#222;border-radius:4px;z-index:2}
 .weekly-phone .placeholder-text{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--text3);font-size:10px}
 .weekly-phone iframe,.weekly-phone img{width:100%;height:100%;object-fit:cover;border:none}
+.weekly-phone[onclick]{transition:transform .15s ease,box-shadow .15s ease}
+.weekly-phone[onclick]:hover{transform:scale(1.03);box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.weekly-phone[onclick] .placeholder-text{color:var(--accent)}
 .weekly-stats-right{padding:8px 0}
 .weekly-big-stat{margin-bottom:14px}
 .weekly-big-val{font-size:24px;font-weight:700;color:var(--text);line-height:1}
@@ -213,64 +216,16 @@ tbody tr:hover td{background:var(--surface2)}
         <div style="font-size:18px;font-weight:600;letter-spacing:-.02em">Best Performing Content</div>
         <div style="font-size:12px;color:var(--text3);margin-top:4px">Top 3 this week</div>
       </div>
-      <div class="weekly-grid" id="weekly-grid">
-        <div class="weekly-card">
-          <div class="weekly-card-inner">
-            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
-            <div class="weekly-stats-right">
-              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
-              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Carousel</div></div>
-              <div style="margin-top:6px"><span class="plat-pill pill-ig" style="font-size:10px">Instagram</span> <span style="font-size:11px;color:var(--text2)">Infinite</span></div>
-            </div>
-          </div>
-          <div class="weekly-engagement">
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-          </div>
-        </div>
-        <div class="weekly-card">
-          <div class="weekly-card-inner">
-            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
-            <div class="weekly-stats-right">
-              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
-              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Reel</div></div>
-              <div style="margin-top:6px"><span class="plat-pill pill-tt" style="font-size:10px">TikTok</span> <span style="font-size:11px;color:var(--text2)">McKenzie</span></div>
-            </div>
-          </div>
-          <div class="weekly-engagement">
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-          </div>
-        </div>
-        <div class="weekly-card">
-          <div class="weekly-card-inner">
-            <div class="weekly-phone"><div class="placeholder-text"><span style="font-size:20px">📷</span><span>Preview</span></div></div>
-            <div class="weekly-stats-right">
-              <div class="weekly-big-stat"><div class="weekly-big-val">—</div><div class="weekly-big-label">Impressions</div></div>
-              <div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">Image</div></div>
-              <div style="margin-top:6px"><span class="plat-pill pill-fb" style="font-size:10px">Facebook</span> <span style="font-size:11px;color:var(--text2)">The Gateway</span></div>
-            </div>
-          </div>
-          <div class="weekly-engagement">
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="weekly-eng-val">—</div></div>
-            <div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div><div class="weekly-eng-val">—</div></div>
-          </div>
-        </div>
-      </div>
+      <div class="weekly-grid" id="weekly-grid"></div>
       <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text3)">
-        ⚙️ Weekly data pulls from a dedicated Google Sheets tab. Columns: content_link, platform, property, content_type, impressions, reach, likes, comments, shares, saves. For previews, use a direct image URL or Google Drive file ID.
+        ⚙️ Weekly data pulls from a dedicated Google Sheets tab (top 3 rows by Rank). For Content Link: a Google Drive share link plays the video directly in the preview; any other link (e.g. Instagram) shows a placeholder you can click to open the post in a new tab.
       </div>
     </div>
   </main>
 </div>
 <script>
 var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-waQPHqtgLCkjf0v9Fz8WXPJEHFpfK15el2oVLyJIcsDbqE05lhGfHOg1ImyXng/pub?gid=34970269&single=true&output=csv';
+var WEEKLY_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-waQPHqtgLCkjf0v9Fz8WXPJEHFpfK15el2oVLyJIcsDbqE05lhGfHOg1ImyXng/pub?gid=1569999138&single=true&output=csv';
 var SOCIAL=['Instagram','TikTok','Facebook'];
 var REVIEWS_PLAT='Google Reviews';
 var REVIEW_FIELD='seguidores';
@@ -287,8 +242,15 @@ var FB_COLORS=['#4F46E5','#9D174D','#166534','#92400E','#1D4ED8','#991B1B','#145
 var ALL_DATA=[],currentView='all',charts={};
 function switchTab(tab){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-tab')===tab)});document.getElementById('tab-dashboard').style.display=tab==='dashboard'?'':'none';document.getElementById('tab-weekly').style.display=tab==='weekly'?'':'none';}
 function loadData(){setStatus('loading','Loading...');fetch(CSV_URL+'&t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){ALL_DATA=parseCSV(text);for(var i=0;i<ALL_DATA.length;i++){if(ALL_DATA[i]['propiedad']==='Ascend')ALL_DATA[i]['propiedad']='Infinite';}if(!ALL_DATA.length)throw new Error('No data');buildNav();buildMonthFilter();render();var now=new Date();var hh=now.getHours().toString().padStart(2,'0');var mm=now.getMinutes().toString().padStart(2,'0');setStatus('ok',ALL_DATA.length+' records · '+hh+':'+mm);document.getElementById('page-sub').textContent=ALL_DATA.length+' records · updated '+hh+':'+mm;}).catch(function(e){setStatus('error','Error');document.getElementById('page-sub').textContent=e.message;document.getElementById('kpi-row').innerHTML='<div class="empty-state" style="grid-column:1/-1">Could not load data.<br><small>'+e.message+'</small></div>';});}
+function loadWeeklyData(){fetch(WEEKLY_CSV_URL+'&t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(text){var rows=parseWeeklyCSV(text);renderWeekly(rows);}).catch(function(e){renderWeekly([]);});}
 function parseCSV(text){var lines=text.trim().split('\n');if(lines.length<2)return[];var headerIdx=0;for(var i=0;i<Math.min(5,lines.length);i++){if(lines[i].toLowerCase().indexOf('fecha')!==-1){headerIdx=i;break;}}var headers=splitLine(lines[headerIdx]);for(var h=0;h<headers.length;h++)headers[h]=headers[h].toLowerCase().trim();var rows=[],numFields=['seguidores','views','likes','comentarios','guardados','compartidos','clicks','posts','profile_visits'];for(var i=headerIdx+1;i<lines.length;i++){var vals=splitLine(lines[i]);var obj={};for(var j=0;j<headers.length;j++)obj[headers[j]]=(vals[j]||'').trim();if(!obj['propiedad']||!obj['fecha'])continue;for(var n=0;n<numFields.length;n++){var raw=(obj[numFields[n]]||'').replace(/[.\s,]/g,'');obj[numFields[n]]=parseInt(raw,10)||0;}rows.push(obj);}return rows;}
 function splitLine(line){var out=[],cur='',inQ=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){out.push(cur);cur='';continue;}cur+=c;}out.push(cur);return out;}
+function parseWeeklyCSV(text){var lines=text.trim().split('\n');if(lines.length<2)return[];var headerIdx=-1;for(var i=0;i<Math.min(10,lines.length);i++){var low=lines[i].toLowerCase();if(low.indexOf('rank')!==-1&&low.indexOf('content link')!==-1){headerIdx=i;break;}}if(headerIdx===-1)return[];var headers=splitLine(lines[headerIdx]);for(var h=0;h<headers.length;h++)headers[h]=headers[h].toLowerCase().trim();var rows=[],numFields=['rank','impressions','reach','likes','comments','shares','saves'];for(var i=headerIdx+1;i<lines.length;i++){if(!lines[i].trim())continue;var vals=splitLine(lines[i]);var obj={};for(var j=0;j<headers.length;j++)obj[headers[j]]=(vals[j]||'').trim();if(!obj['content link']&&!obj['rank'])continue;for(var n=0;n<numFields.length;n++){var raw=(obj[numFields[n]]||'').replace(/[.\s,]/g,'');obj[numFields[n]]=parseInt(raw,10)||0;}rows.push(obj);}rows.sort(function(a,b){return(a['rank']||99)-(b['rank']||99);});return rows.slice(0,3);}
+function driveFileId(url){if(!url)return null;var m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);if(m)return m[1];m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);if(m)return m[1];return null;}
+function weeklyPreviewHTML(link,plat){var fid=driveFileId(link);if(fid){return'<iframe src="https://drive.google.com/file/d/'+fid+'/preview" allow="autoplay" loading="lazy"></iframe>';}var icon=plat==='Instagram'?'📷':plat==='TikTok'?'🎵':plat==='Facebook'?'👍':'🔗';var label=link?'View post':'No link';return'<div class="placeholder-text"><span style="font-size:20px">'+icon+'</span><span>'+label+'</span></div>';}
+var WEEKLY_ENG_ICONS=['<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>','<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>','<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>','<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>'];
+function weeklyCardHTML(row){var link=row['content link']||'';var plat=row['platform']||'';var prop=row['property']||'';var ctype=row['content type']||'—';var fid=driveFileId(link);var clickable=!fid&&link;var phoneAttrs=clickable?' onclick="window.open(\''+link.replace(/'/g,"%27")+'\',\'_blank\')" style="cursor:pointer" title="Open post"':'';var eng=[row['likes']||0,row['comments']||0,row['shares']||0,row['saves']||0];var engHtml='';for(var i=0;i<4;i++){engHtml+='<div class="weekly-eng-item"><div class="weekly-eng-icon"><svg viewBox="0 0 24 24">'+WEEKLY_ENG_ICONS[i]+'</svg></div><div class="weekly-eng-val">'+fmt(eng[i])+'</div></div>';}var pillClass=PLAT_PILL[plat]||'pill-ig';var html='<div class="weekly-card">';html+='<div class="weekly-card-inner">';html+='<div class="weekly-phone"'+phoneAttrs+'>'+weeklyPreviewHTML(link,plat)+'</div>';html+='<div class="weekly-stats-right">';html+='<div class="weekly-big-stat"><div class="weekly-big-val">'+fmt(row['impressions'])+'</div><div class="weekly-big-label">Impressions</div></div>';html+='<div class="weekly-format"><div class="weekly-format-label">Post Format</div><div class="weekly-format-val">'+ctype+'</div></div>';html+='<div style="margin-top:6px"><span class="plat-pill '+pillClass+'" style="font-size:10px">'+plat+'</span> <span style="font-size:11px;color:var(--text2)">'+prop+'</span></div>';html+='</div></div>';html+='<div class="weekly-engagement">'+engHtml+'</div>';html+='</div>';return html;}
+function renderWeekly(rows){var container=document.getElementById('weekly-grid');if(!rows||!rows.length){container.innerHTML='<div class="empty-state" style="grid-column:1/-1">No weekly report data yet.<br><small>Fill in the Weekly Report sheet to see top posts here.</small></div>';return;}var html='';for(var i=0;i<rows.length;i++){html+=weeklyCardHTML(rows[i]);}container.innerHTML=html;}
 function isSocial(r){return SOCIAL.indexOf(r['plataforma'])!==-1;}
 function isReview(r){return r['plataforma']===REVIEWS_PLAT;}
 function getFiltered(){var month=document.getElementById('month-filter').value;return ALL_DATA.filter(function(r){return isSocial(r)&&(currentView==='all'||r['propiedad']===currentView)&&(month==='ALL'||r['fecha']===month);});}
@@ -414,6 +376,7 @@ function fmt(n){if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed
 function fmtMonth(iso){if(!iso)return'';var p=iso.split('-');var names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return(names[parseInt(p[1],10)-1]||p[1])+' '+p[0];}
 function setStatus(type,msg){var el=document.getElementById('status');el.textContent=msg;el.className='status-pill'+(type!=='ok'?' '+type:'');}
 loadData();setInterval(loadData,5*60*1000);
+loadWeeklyData();setInterval(loadWeeklyData,5*60*1000);
 </script>
 </body>
 </html>
